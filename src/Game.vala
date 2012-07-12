@@ -238,7 +238,6 @@ public class Game:GLib.Object
 				dialog.run();
 				dialog.destroy ();
 
-//				end_game ();
 				players[taker].receive_dog (dog);
 				dog = null;
 			}

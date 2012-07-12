@@ -20,7 +20,7 @@ public class GraphicalPlayer:Player
 	private static const int[] HAND_POS = {50, 450};
 	private static const int[] DOG_POS = {250, 250};
 	private static const int[] BUTTON_POS = {300, 400};
-	/* Two followings should be const, but there is a bug in the vala
+	/* Two followings should be const, but there seems to be a bug in the vala
 	   compiler for const multi-dimensionnal arrays... let's change that
 	   when it's fixed. */
 	private static int[,] PLAYERS_LABELS_POS = {{250, 250}, {500, 100}, {250, 25},{100,100}};
@@ -127,15 +127,6 @@ public class GraphicalPlayer:Player
 	 **/
 	public override void treat_move_info (int player, Card c)
 	{
-		// assert (c is GraphicalCard);
-		// GraphicalCard card = (GraphicalCard) c;
-		// if (players_cards[player] != null)
-		// {
-		// 	players_cards[player].destroy;
-		// }
-		// players_cards[player] = new Gtk.Image.from_file (card.image_file);
-		// fixed.put (players_cards[player], PLAYERS_CARDS_POS[player,0], PLAYERS_CARDS_POS[player,1]);
-		// players_cards[player].show ();
 	}
 	 
 
@@ -177,12 +168,6 @@ public class GraphicalPlayer:Player
 				card.disconnect (old_callback);
 				old_callback = 0;
 			}
-			// old_callback = card.select.connect (() =>
-			// 	{
-			// 		this.hand.list.remove (card);
-			// 		g_hand.refresh ();
-			// 		game.give_card (this, card);
-			// 	});
 		}
 	}
 
@@ -327,7 +312,6 @@ public class GraphicalPlayer:Player
 	public override void select_card (int beginner, Card[] cards)
 	{
 		/** TODO: factorize this code **/
-		/* TODO: rewrite this code */
 		for (int i = 0; i < cards.length; i++)
 		{
 			/* Delete labels and cards widgets from previous game */   

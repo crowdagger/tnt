@@ -1,7 +1,7 @@
 /**
  * IA implementation of the Player Class.
  *
- * TODO: actually implement some IA...
+ * TODO: allow the IA to take.
  **/
 public class IAPlayer:Player
 {
@@ -70,10 +70,6 @@ public class IAPlayer:Player
 				{
 					sure_to_win = true;
 				}
-			}
-			else
-			{
-//				stdout.printf ("player hasn't played, better be cautious.\n");
 			}
 
 			if (sure_to_win)

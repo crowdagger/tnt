@@ -1,3 +1,7 @@
+/**
+ * Enum handling card colour. Trumps is considered a fifth colour –
+ * and the excuse is number 0
+ **/
 public enum Colour 
   {
     SPADE, HEART, DIAMOND, CLUB, TRUMP;

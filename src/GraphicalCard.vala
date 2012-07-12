@@ -1,3 +1,6 @@
+/**
+ * This class manages the display and all Gtk stuff to manipulate a card.
+ **/
 public class GraphicalCard:Card
 {
 	public string image_file {get; private set;}

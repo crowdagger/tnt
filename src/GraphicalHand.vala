@@ -1,3 +1,6 @@
+/**
+ * This class displays the hand of the player, and allows to select which card to play.
+ **/
 public class GraphicalHand:Gtk.VBox
 {
 	public Hand hand {get; private set;}
