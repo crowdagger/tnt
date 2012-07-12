@@ -1,0 +1,386 @@
+/**
+ * Gtk+ interface for human player class
+ **/
+public class GraphicalPlayer:Player
+{
+	public GraphicalHand g_hand {get; private set;}
+
+	private ulong old_callback;	
+
+	/* Widgets for differents elements */
+	private Gtk.Window window;
+	private Gtk.Fixed fixed;
+	private Gtk.Button button;
+	private GraphicalHand g_dog;
+	private Gtk.Label[] players_labels;
+	private Gtk.Image[] players_cards;
+
+	/* Const parameters for the positions of differents elements */
+	private static const int[] WINDOW_SIZE = {600,600};
+	private static const int[] HAND_POS = {50, 450};
+	private static const int[] DOG_POS = {250, 250};
+	private static const int[] BUTTON_POS = {300, 400};
+	/* Two followings should be const, but there is a bug in the vala
+	   compiler for const multi-dimensionnal arrays... let's change that
+	   when it's fixed. */
+	private static int[,] PLAYERS_LABELS_POS = {{250, 250}, {500, 100}, {250, 25},{100,100}};
+	private static int[,] PLAYERS_CARDS_POS = {{250, 275}, {500, 150}, {250, 75},{100,150}};
+
+	private int beginner;
+	private Card[] cards;
+
+	/**
+	 * GraphicalPlayer constructor
+	 *
+	 * Init a window and the elements to display game information 
+	 **/
+	public GraphicalPlayer (Game game, string? name = null)
+	{
+		base (game, name);
+		button = null; 
+		g_dog = null;
+
+		/* Initialize the window */
+		window = new Gtk.Window ();
+		window.title = name;
+		window.set_default_size (WINDOW_SIZE[0], WINDOW_SIZE[1]);
+		window.window_position = Gtk.WindowPosition.CENTER;
+		window.destroy.connect (Gtk.main_quit);
+	   
+		/* Initialize the fixed */
+		fixed = new Gtk.Fixed ();
+		window.add (fixed);
+
+		/* Initialize the hand */
+		g_hand = new GraphicalHand (hand);
+		fixed.put (g_hand, HAND_POS[0], HAND_POS[1]);
+
+		players_labels = new Gtk.Label[3];
+		players_cards = new Gtk.Image[4];
+		for (int i = 0; i < 4; i++)
+		{
+			players_labels[i] = null;
+			players_cards[i] = null;
+		}
+
+		window.show_all ();
+	}
+
+	/**
+	 * At the end of turn...
+	 *
+	 * Clean displayed player cards
+	 **/
+	public override void treat_turn_info (int winner, Card[] cards)
+	{
+		/* TODO: rewrite this code */
+		for (int i = 0; i < players_cards.length; i++)
+		{
+			/* Delete labels and cards widgets from previous game */   
+			if (players_cards[i] != null)
+			{
+				players_cards[i].destroy ();
+				players_cards[i] = null;
+			}
+		}
+		for (int i = 0; i < cards.length; i++)
+		{
+			players_cards[i] = new Gtk.Image.from_file (((GraphicalCard)cards[i]).image_file);
+			if (i == winner)
+			{
+				players_labels[i].set_markup ("<span color = \"#FF0000\"><b>"+game.players[i].name+"</b></span>");
+			}
+			else
+			{
+				players_labels[i].set_markup ("<b>"+game.players[i].name+"</b>");
+			}
+
+			fixed.put (players_cards[i], PLAYERS_CARDS_POS[i,0], PLAYERS_CARDS_POS[i,1]);
+			players_cards[i].show ();
+		}
+		button = new Gtk.Button.with_label (game.players[winner].name + " won");
+		fixed.put (button, BUTTON_POS[0], BUTTON_POS[1]);
+		button.clicked.connect (clear_cards);
+		button.show ();
+	}
+
+	public void clear_cards ()
+	{
+		if (button != null)
+		{
+			button.destroy ();
+		}
+		for (int i = 0; i < players_cards.length; i++)
+		{
+			/* Delete labels and cards widgets from previous turn */   
+			if (players_cards[i] != null)
+			{
+				players_cards[i].destroy ();
+				players_cards[i] = null;
+			}
+		}
+		game.approve_new_turn (this);
+	}
+		
+	/**
+	 * Display the card played by a player (by id)
+	 **/
+	public override void treat_move_info (int player, Card c)
+	{
+		// assert (c is GraphicalCard);
+		// GraphicalCard card = (GraphicalCard) c;
+		// if (players_cards[player] != null)
+		// {
+		// 	players_cards[player].destroy;
+		// }
+		// players_cards[player] = new Gtk.Image.from_file (card.image_file);
+		// fixed.put (players_cards[player], PLAYERS_CARDS_POS[player,0], PLAYERS_CARDS_POS[player,1]);
+		// players_cards[player].show ();
+	}
+	 
+
+	public override void receive_hand (Hand hand)
+	{
+		this.hand = hand;
+		this.hand.sort ();
+		g_hand.refresh (hand);
+
+		/* Initialize other player displays */
+		/* TODO: not hard-code for 4-player game */
+
+		for (int i = 0; i < 4; i++)
+		{
+			/* Delete labels and cards widgets from previous game */   
+			if (players_cards[i] != null)
+			{
+				players_cards[i].destroy ();
+				players_cards[i] = null;
+			}
+			if (players_labels[i] != null)
+			{
+				players_labels[i].destroy ();
+				players_labels[i] = null;
+			}
+			players_labels[i] = new Gtk.Label (null);
+			players_labels[i].set_markup ("<b>"+game.players[i].name+"</b>");
+			fixed.put (players_labels[i], PLAYERS_LABELS_POS[i,0], PLAYERS_LABELS_POS[i,1]);
+			players_labels[i].show ();
+		}
+
+
+		foreach (Card c in hand.list)
+		{
+			assert (c is GraphicalCard);
+			GraphicalCard card = (GraphicalCard) c;
+			if (old_callback != 0)
+			{
+				card.disconnect (old_callback);
+				old_callback = 0;
+			}
+			// old_callback = card.select.connect (() =>
+			// 	{
+			// 		this.hand.list.remove (card);
+			// 		g_hand.refresh ();
+			// 		game.give_card (this, card);
+			// 	});
+		}
+	}
+
+	public void send_bid (Bid bid)
+	{
+		game.give_bid (this, bid);
+	}
+
+	/**
+	 * Display a dialog to select a bid
+	 **/
+	public override void select_bid (Bid max_bid)
+	{
+		Gtk.Dialog dialog = new Gtk.Dialog.with_buttons ("Select bid", window, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.Stock.OK, 0, null);
+		Gtk.Container content_area = (Gtk.Container) dialog.get_content_area ();
+
+		/* Display one radiobutton per possible bid */
+		Bid[] bids = Bid.all ();
+		Gtk.RadioButton[] buttons = new Gtk.RadioButton[bids.length];
+
+		for (int i = 0; i < bids.length; i++)
+		{
+			if (i == 0)
+			{
+				buttons[i] = new Gtk.RadioButton.with_label (null, bids[i].to_string ());
+			}
+			else 
+			{
+				buttons[i] = new Gtk.RadioButton.with_label_from_widget (buttons[0], bids[i].to_string ());
+				/* Only authorize bidding if it is superior to current bid */
+				if (bids[i] <= max_bid)
+				{
+					buttons[i].set_sensitive (false);
+				}
+			}
+			content_area.add (buttons[i]);
+			
+		}
+
+		dialog.response.connect (() => 
+			{
+				int active = 0;
+				for (int i = 0; i < bids.length; i++)
+				{
+					if (buttons[i].get_active ())
+					{
+						active = i;
+					}
+				}
+				dialog.destroy ();
+				send_bid (bids[active]);
+			});
+				
+		dialog.show_all ();
+	}
+
+	public override void receive_dog (Hand dog)
+	{
+		g_dog = new GraphicalHand (dog);
+		fixed.put (g_dog, DOG_POS[0], DOG_POS[1]);
+		
+		button = new Gtk.Button.with_label ("OK");
+		fixed.put (button, BUTTON_POS[0], BUTTON_POS[1]);
+		button.clicked.connect (add_to_dog);
+		button.show ();
+	}
+
+	public void add_to_dog ()
+	{
+		foreach (Card c in g_dog.hand.list)
+		{
+			hand.add (c);
+		}
+		hand.sort ();
+
+		g_dog.destroy ();
+		g_dog = null;
+		button.clicked.disconnect (add_to_dog);
+		button.clicked.connect (check_dog);
+
+		foreach (Card c in hand.list)
+		{
+			assert (c is GraphicalCard);
+			GraphicalCard card = (GraphicalCard) c;
+			card.is_selected = false;
+			card.select.connect (card.switch_selected);
+		}
+		g_hand.refresh (hand);			
+	}
+
+	/**
+	 * Check that there are six cards in the dog, and if ok, send them
+	 * to game
+	 **/
+	public void check_dog ()
+	{
+		int number_selected = 0;
+		/* First pass to check the number of select cards */
+		foreach (Card c in hand.list)
+		{
+			assert (c is GraphicalCard);
+			GraphicalCard card = (GraphicalCard) c;
+			if (card.is_selected)
+			{
+				number_selected++;
+			}
+		}
+		if (number_selected != 6)
+		{
+			var dialog = new Gtk.MessageDialog (null,Gtk.DialogFlags.MODAL,Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "The dog must contain six cards"); 
+			dialog.set_title("Dog error");
+			dialog.run();
+			dialog.destroy ();
+		}
+		else
+		{
+			button.destroy ();
+			button = null;
+
+			Hand dog = new Hand ();
+			foreach (Card c in hand.list)
+			{
+				assert (c is GraphicalCard);
+				GraphicalCard card = (GraphicalCard) c;
+				card.select.disconnect (card.switch_selected);
+				if (card.is_selected)
+				{
+					card.is_selected = false;
+					dog.add (card);
+				}
+			}
+			foreach (Card c in dog.list)
+				hand.list.remove (c);
+			g_hand.refresh (hand);
+			game.give_dog (this, dog);
+		}
+	}
+
+	/**
+	 * Activate signals to select a card and call play_card
+	 **/
+	public override void select_card (int beginner, Card[] cards)
+	{
+		/** TODO: factorize this code **/
+		/* TODO: rewrite this code */
+		for (int i = 0; i < cards.length; i++)
+		{
+			/* Delete labels and cards widgets from previous game */   
+			if (players_cards[i] != null)
+			{
+				players_cards[i].destroy ();
+				players_cards[i] = null;
+			}
+			if (cards[i] != null)
+			{
+				assert (cards[i] is GraphicalCard);
+				GraphicalCard c = (GraphicalCard) cards[i];
+				players_cards[i] = new Gtk.Image.from_file (c.image_file);
+				fixed.put (players_cards[i], PLAYERS_CARDS_POS[i,0], PLAYERS_CARDS_POS[i,1]);
+				players_cards[i].show ();
+			}
+		}
+		
+
+
+		this.beginner = beginner;
+		this.cards = cards;
+
+		foreach (Card c in hand.list)
+		{
+			assert (c is GraphicalCard);
+			GraphicalCard card = (GraphicalCard) c;
+			card.select.connect (play_card);
+		}
+	}
+	
+	/**
+	 * Called by selected card to give it to game.
+	 * 
+	 * TODO: check if we have the right to play a card
+	 **/
+	public void play_card (GraphicalCard card)
+	{
+		/* If the card is playable... */
+		if (hand.is_card_playable (card, beginner, cards))
+		{
+			/* Disconnect callbacks */
+			foreach (Card c in hand.list)
+			{
+				assert (c is GraphicalCard);
+				GraphicalCard the_card = (GraphicalCard) c;
+				the_card.select.disconnect (play_card);
+			}		
+			
+			/* Remove card from hand and send it */
+			hand.list.remove (card);
+			g_hand.refresh (hand);
+			game.give_card (this, card);
+		}
+	}
+}
