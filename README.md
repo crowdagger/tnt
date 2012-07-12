@@ -68,4 +68,4 @@ computer and it's not really practical.
 
 Contact
 -------
-liz.henry@ouvaton.org
+liz.henry at ouvaton dot org
