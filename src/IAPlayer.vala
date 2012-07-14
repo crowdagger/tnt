@@ -49,13 +49,18 @@ public class IAPlayer:Player
 		/* First, determine the score */
 		double value = 0.0;
 		int oudlers = 0;
+		int trumps = 0;
 		Bid preferred_bid = Bid.PASSE;
 		foreach (Card c in this.hand.list)
 		{
 			value += c.value;
-			if (c.is_oudler ())
+			if (c.colour == Colour.TRUMP)
 			{
-				oudlers += 1;
+				trumps += 1;
+				if (c.is_oudler ())
+				{
+					oudlers += 1;
+				}
 			}
 		}
 
@@ -63,21 +68,21 @@ public class IAPlayer:Player
 		 * takes or not. TODO: this should be based on parameters, so
 		 * different IA players don't behave in the same way.
 		 */
-		value = 10 * oudlers + value;
+		value = 10 * oudlers + 3 * trumps + value;
 		stdout.printf ("%s's value = %f\n", this.name, value);
-		if (value > 90)
+		if (value > 110)
 		{
 			preferred_bid = Bid.GARDE_CONTRE;
 		}
-		else if (value > 80)
+		else if (value > 95)
 		{
 			preferred_bid = Bid.GARDE_SANS;
 		}
-		else if (value > 60)
+		else if (value > 80)
 		{
 			preferred_bid = Bid.GARDE;
 		}
-		else if (value > 40)
+		else if (value > 60)
 		{
 			preferred_bid = Bid.PETITE;
 		}
@@ -221,15 +226,8 @@ public class IAPlayer:Player
 			if (cards[game.taker] != null)
 			{
 				/* Taker has already played, so determine if they win */
-				int winner = beginner;
-				for (int i = beginner; i < beginner + cards.length; i++)
-				{
-					int index = i % cards.length;
-					if (cards[index].is_better_than (cards[winner]))
-					{
-						winner = index;
-					}
-				}
+				int winner = determine_winner (beginner, cards);
+
 				if (winner != game.taker)
 				{
 					sure_to_win = true;
@@ -239,15 +237,7 @@ public class IAPlayer:Player
 			if (sure_to_win)
 			{
 				/* Sure to win, put highest card */
-				double max_value = 0.0;
-				foreach (Card card in possible_cards)
-				{
-					if (card.value > max_value)
-					{
-						selected_card = card;
-						max_value = card.value;
-					}
-				}
+				selected_card = play_high_card (beginner, cards, possible_cards);
 			}
 			else
 			{
@@ -268,21 +258,71 @@ public class IAPlayer:Player
 				/* If we can't put better, put the lowest */
 				if (selected_card == null)
 				{
-					double min_value = 10.0;
-					foreach (Card card in possible_cards)
-					{
-						if (card.value < min_value)
-						{
-							selected_card = card;
-							min_value = card.value;
-						}
-					}
+					selected_card = play_low_card (beginner, cards, possible_cards);
 				}
 			}
 		}
 		/* Give the selected card */
 		hand.list.remove (selected_card);
 		game.give_card (this, selected_card);
+	}
+
+	/**
+	 * Return the highest value card we can play
+	 **/
+	private Card play_high_card (int beginner, Card[] cards, Gee.ArrayList<Card> possible_cards)
+	{
+		Card selected_card = null;
+		double max_value = 0.0;
+		foreach (Card card in possible_cards)
+		{
+			if (card.value > max_value)
+			{
+				selected_card = card;
+				max_value = card.value;
+			}
+		}
+		return selected_card;
+	}
+
+	/**
+	 * Return the lowest value card we can play
+	 **/
+	private Card play_low_card (int beginner, Card[] cards, Gee.ArrayList<Card> possible_cards)
+	{
+		Card selected_card = null; 
+		double min_value = 10.0;
+		foreach (Card card in possible_cards)
+		{
+			if (card.value < min_value)
+			{
+				selected_card = card;
+				min_value = card.value;
+			}
+		}
+		return selected_card;
+	}
+
+
+	/**
+	 * Determine who wins according to currently played cards
+	 **/
+	private int determine_winner (int beginner, Card[] cards)
+	{
+		int winner = beginner;
+		for (int i = beginner; i < beginner + cards.length; i++)
+		{
+			int index = i % cards.length;
+			if (cards[index] != null)
+			{
+				if (cards[index].is_better_than (cards[winner]))
+				{
+					winner = index;
+				}
+			}
+		}
+		
+		return winner;
 	}
 
 	/** 
