@@ -5,16 +5,12 @@ Features
 --------
 * Basic tarot rules implemented, but special cases are missing
   ("poignee", "misere", "petit au bout", "garde sans")
-  
 * Four-player (human or IA) only, but it's the most interesting.
-
 * Possibility to have multiple human players on the same
   computers. That's not really great because one player might see the
   hand of other ones, but well...  
-  
 * Very basic IA.
-
-* Bugs!
+* Bugs?
 
 
 
