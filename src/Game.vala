@@ -464,12 +464,10 @@ public class Game:GLib.Object
 		}
 
 		nb_approvals++;
-		stdout.printf ("nb_approvals:%d\n", nb_approvals);
 		
 		if (nb_approvals == nb_players)
 		{
 			nb_approvals = 0;
-			stdout.printf ("game should start\n");
 			current_player = starter;
 			players[current_player].select_card (current_player, played_cards);
 		}

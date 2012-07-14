@@ -71,7 +71,6 @@ public class IAPlayer:Player
 		 * different IA players don't behave in the same way.
 		 */
 		value = 10 * oudlers + 3 * trumps + value;
-		stdout.printf ("%s's value = %f\n", this.name, value);
 		if (value > 110)
 		{
 			preferred_bid = Bid.GARDE_CONTRE;
@@ -117,7 +116,6 @@ public class IAPlayer:Player
 		{
 			foreach (Card c in dog.list)
 			{
-				stdout.printf ("IA received %s\n", c.get_label ());
 				this.hand.add (c);
 			}
 			
@@ -127,7 +125,6 @@ public class IAPlayer:Player
 			int remaining_cards = 6;
 			while (remaining_cards > 0)
 			{
-				stdout.printf ("Remaining cards:%d\n", remaining_cards);
 				/* See if we can make a cut */
 				int[] nb_colours = new int[4];
 				foreach (Card c in this.hand.list)
@@ -142,11 +139,6 @@ public class IAPlayer:Player
 							}
 						}
 					}
-				}
-				
-				foreach (int x in nb_colours)
-				{
-					stdout.printf ("%d\n",x);
 				}
 				
 				int best_for_cut = 0;
@@ -169,8 +161,6 @@ public class IAPlayer:Player
 				
 				/* TODO: one day, handle the case where player has too much trumps and kings */
 				
-				stdout.printf ("lowest: %d, colour: %s\n", lowest_cards, Colour.all ()[best_for_cut].to_string ());
-				
 				Gee.ArrayList <Card> to_remove = new Gee.ArrayList <Card> ();
 				foreach (Card c in hand.list)
 				{
@@ -178,7 +168,6 @@ public class IAPlayer:Player
 					{
 						new_dog.add (c);
 						to_remove.add (c);
-						stdout.printf ("IA put %s in dog\n", c.get_label ());
 						remaining_cards--;
 						
 						if (remaining_cards == 0)
@@ -339,7 +328,6 @@ public class IAPlayer:Player
 				nb_null++;
 			}
 		}
-		stdout.printf("nb_null:%d\n", nb_null);
 		
 		/* If we are last to play, play a higlhy valued card if it wins */
 		if (nb_null == 1)
