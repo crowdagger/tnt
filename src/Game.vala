@@ -260,7 +260,11 @@ public class Game:GLib.Object
 				dialog.run();
 				dialog.destroy ();
 
-				players[taker].receive_dog (dog);
+				nb_approvals = 0;
+				foreach (Player p in players)
+				{
+					p.receive_dog (dog);
+				}
 				dog = null;
 			}
 			else
@@ -440,13 +444,35 @@ public class Game:GLib.Object
 	/** 
 	 * Get a dog a player want to make. Return true if legit, false
 	 * else.
+	 *
+	 * (Actually, always return true, and breaks on an assert else.)
+	 *
+	 * If called from other player than taker, dog should be set to
+	 * null (at least, it's not used.)
 	 **/
-	public bool give_dog (Player player, Hand dog)
+	public bool give_dog (Player player, Hand? dog)
 	{
-		taker_stack.take_all (dog);
+		if (players[taker] != player)
+		{
+			assert (dog == null);
+		}
+		else
+		{
+			assert (dog != null);
+			assert (dog.list.size == 6);
+			taker_stack.take_all (dog);
+		}
+
+		nb_approvals++;
+		stdout.printf ("nb_approvals:%d\n", nb_approvals);
 		
-		current_player = starter;
-		players[current_player].select_card (current_player, played_cards);
+		if (nb_approvals == nb_players)
+		{
+			nb_approvals = 0;
+			stdout.printf ("game should start\n");
+			current_player = starter;
+			players[current_player].select_card (current_player, played_cards);
+		}
 			
 		return true;
 	}

@@ -97,93 +97,101 @@ public class IAPlayer:Player
 	}
 
 	/**
-	 * Receive a dog, if the player is the taker.
+	 * Receive a dog. If the player is the taker, a new dog must be sent.
 	 **/
 	public override void receive_dog (Hand dog)
 	{
-		foreach (Card c in dog.list)
+		/* Check if we are the taker or not */
+		if (game.players[game.taker] != this)
 		{
-			stdout.printf ("IA received %s\n", c.get_label ());
-			this.hand.add (c);
+			game.give_dog (this, null);
 		}
-
-		Hand new_dog = new Hand ();
-		this.hand.sort_by_value ();
-
-		int remaining_cards = 6;
-		while (remaining_cards > 0)
+		else
 		{
-			stdout.printf ("Remaining cards:%d\n", remaining_cards);
-			/* See if we can make a cut */
-			int[] nb_colours = new int[4];
-			foreach (Card c in this.hand.list)
+			foreach (Card c in dog.list)
 			{
-				if (c.rank != 14) // Don't count the king
+				stdout.printf ("IA received %s\n", c.get_label ());
+				this.hand.add (c);
+			}
+			
+			Hand new_dog = new Hand ();
+			this.hand.sort_by_value ();
+			
+			int remaining_cards = 6;
+			while (remaining_cards > 0)
+			{
+				stdout.printf ("Remaining cards:%d\n", remaining_cards);
+				/* See if we can make a cut */
+				int[] nb_colours = new int[4];
+				foreach (Card c in this.hand.list)
 				{
-					for (int i = 0; i < 4; i++)
+					if (c.rank != 14) // Don't count the king
 					{
-						if (i == c.colour)
+						for (int i = 0; i < 4; i++)
 						{
-							nb_colours[i] += 1;
+							if (i == c.colour)
+							{
+								nb_colours[i] += 1;
+							}
 						}
 					}
 				}
-			}
-
-			foreach (int x in nb_colours)
-			{
-				stdout.printf ("%d\n",x);
-			}
-
-			int best_for_cut = 0;
-			int lowest_cards = 91;
-			for (int i = 0; i < 4; i++)
-			{
-				if (nb_colours[i] == 0)
+				
+				foreach (int x in nb_colours)
 				{
-					/* Case already matched */
-					continue;
+					stdout.printf ("%d\n",x);
 				}
-				else if (nb_colours[i] < lowest_cards)
+				
+				int best_for_cut = 0;
+				int lowest_cards = 91;
+				for (int i = 0; i < 4; i++)
 				{
-					best_for_cut = i;
-					lowest_cards = nb_colours[i];
-				}
-			}
-
-			assert (lowest_cards > 0);
-			
-			/* TODO: one day, handle the case where player has too much trumps and kings */
-			
-			stdout.printf ("lowest: %d, colour: %s\n", lowest_cards, Colour.all ()[best_for_cut].to_string ());
-
-			Gee.ArrayList <Card> to_remove = new Gee.ArrayList <Card> ();
-			foreach (Card c in hand.list)
-			{
-				if (c.colour == best_for_cut && c.rank != 14)
-				{
-					new_dog.add (c);
-					to_remove.add (c);
-					stdout.printf ("IA put %s in dog\n", c.get_label ());
-					remaining_cards--;
-					
-					if (remaining_cards == 0)
+					if (nb_colours[i] == 0)
 					{
-						foreach (Card cprime in to_remove)
-						{
-							this.hand.remove (cprime);
-						}
-						break;
+						/* Case already matched */
+						continue;
+					}
+					else if (nb_colours[i] < lowest_cards)
+					{
+						best_for_cut = i;
+						lowest_cards = nb_colours[i];
 					}
 				}
+				
+				assert (lowest_cards > 0);
+				
+				/* TODO: one day, handle the case where player has too much trumps and kings */
+				
+				stdout.printf ("lowest: %d, colour: %s\n", lowest_cards, Colour.all ()[best_for_cut].to_string ());
+				
+				Gee.ArrayList <Card> to_remove = new Gee.ArrayList <Card> ();
+				foreach (Card c in hand.list)
+				{
+					if (c.colour == best_for_cut && c.rank != 14)
+					{
+						new_dog.add (c);
+						to_remove.add (c);
+						stdout.printf ("IA put %s in dog\n", c.get_label ());
+						remaining_cards--;
+						
+						if (remaining_cards == 0)
+						{
+							foreach (Card cprime in to_remove)
+							{
+								this.hand.remove (cprime);
+							}
+							break;
+						}
+					}
+				}
+				foreach (Card cprime in to_remove)
+				{
+					this.hand.remove (cprime);
+				}
 			}
-			foreach (Card cprime in to_remove)
-			{
-				this.hand.remove (cprime);
-			}
+			
+			game.give_dog (this, new_dog);
 		}
-
-		game.give_dog (this, new_dog);
 	}
 
 	/**
