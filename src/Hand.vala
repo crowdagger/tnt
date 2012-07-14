@@ -22,6 +22,25 @@
 ***********************************************************************/
 
 /**
+ * Callback for sorting cards by value 
+ **/
+static int card_sorter_value (Card a, Card b)
+{
+	if (a.value < b.value)
+	{
+		return -1;
+	}
+	else if (a.value > b.value)
+	{
+		return 1;
+	}
+	else
+	{
+		return card_sorter (a, b);
+	}
+}
+
+/**
  * Callback for sorting the game
  **/
 static int card_sorter (Card a, Card b)
@@ -60,11 +79,19 @@ public class Hand:Object
 	}
 
 	/**
-	 * Add a card to the internal list; equivalet do hand.add () 
+	 * Add a card to the internal list; equivalent to hand.add () 
 	 **/
 	public void add (Card card)
 	{
 		list.add (card);
+	}
+
+	/** 
+	 * Remove a card from the internal list; equivalent to hand.remove ()
+	 */
+	public void remove (Card card)
+	{
+		list.remove (card);
 	}
 
 	/**
@@ -73,6 +100,14 @@ public class Hand:Object
 	public void sort ()
 	{
 		list.sort ((CompareFunc<Card>) card_sorter);
+	}
+
+	/**
+	 * Sort the cards by value 
+	 **/
+	public void sort_by_value ()
+	{
+		list.sort ((CompareFunc<Card>) card_sorter_value);
 	}
 
 	/**

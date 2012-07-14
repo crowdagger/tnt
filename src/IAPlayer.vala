@@ -59,26 +59,25 @@ public class IAPlayer:Player
 			}
 		}
 
-		stdout.printf ("%s's value = %f\n", this.name, value);
-
 		/* Second, according to the score, determine if the player
 		 * takes or not. TODO: this should be based on parameters, so
 		 * different IA players don't behave in the same way.
 		 */
 		value = 10 * oudlers + value;
-		if (value > 55)
+		stdout.printf ("%s's value = %f\n", this.name, value);
+		if (value > 90)
 		{
 			preferred_bid = Bid.GARDE_CONTRE;
 		}
-		else if (value > 45)
+		else if (value > 80)
 		{
 			preferred_bid = Bid.GARDE_SANS;
 		}
-		else if (value > 35)
+		else if (value > 60)
 		{
 			preferred_bid = Bid.GARDE;
 		}
-		else if (value > 25)
+		else if (value > 40)
 		{
 			preferred_bid = Bid.PETITE;
 		}
@@ -102,8 +101,89 @@ public class IAPlayer:Player
 	 **/
 	public override void receive_dog (Hand dog)
 	{
-		/* Actually do nothing, just give the dog back to game */
-		game.give_dog (this, dog);
+		foreach (Card c in dog.list)
+		{
+			stdout.printf ("IA received %s\n", c.get_label ());
+			this.hand.add (c);
+		}
+
+		Hand new_dog = new Hand ();
+		this.hand.sort_by_value ();
+
+		int remaining_cards = 6;
+		while (remaining_cards > 0)
+		{
+			stdout.printf ("Remaining cards:%d\n", remaining_cards);
+			/* See if we can make a cut */
+			int[] nb_colours = new int[4];
+			foreach (Card c in this.hand.list)
+			{
+				if (c.rank != 14) // Don't count the king
+				{
+					for (int i = 0; i < 4; i++)
+					{
+						if (i == c.colour)
+						{
+							nb_colours[i] += 1;
+						}
+					}
+				}
+			}
+
+			foreach (int x in nb_colours)
+			{
+				stdout.printf ("%d\n",x);
+			}
+
+			int best_for_cut = 0;
+			int lowest_cards = 91;
+			for (int i = 0; i < 4; i++)
+			{
+				if (nb_colours[i] == 0)
+				{
+					/* Case already matched */
+					continue;
+				}
+				else if (nb_colours[i] < lowest_cards)
+				{
+					best_for_cut = i;
+					lowest_cards = nb_colours[i];
+				}
+			}
+
+			assert (lowest_cards > 0);
+			
+			/* TODO: one day, handle the case where player has too much trumps and kings */
+			
+			stdout.printf ("lowest: %d, colour: %s\n", lowest_cards, Colour.all ()[best_for_cut].to_string ());
+
+			Gee.ArrayList <Card> to_remove = new Gee.ArrayList <Card> ();
+			foreach (Card c in hand.list)
+			{
+				if (c.colour == best_for_cut && c.rank != 14)
+				{
+					new_dog.add (c);
+					to_remove.add (c);
+					stdout.printf ("IA put %s in dog\n", c.get_label ());
+					remaining_cards--;
+					
+					if (remaining_cards == 0)
+					{
+						foreach (Card cprime in to_remove)
+						{
+							this.hand.remove (cprime);
+						}
+						break;
+					}
+				}
+			}
+			foreach (Card cprime in to_remove)
+			{
+				this.hand.remove (cprime);
+			}
+		}
+
+		game.give_dog (this, new_dog);
 	}
 
 	/**

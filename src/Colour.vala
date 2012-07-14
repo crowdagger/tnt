@@ -53,4 +53,9 @@ public enum Colour
         }
       
 	}
+
+	public static Colour[] all ()
+	{
+		return {SPADE, HEART, DIAMOND, CLUB, TRUMP};
+	}
 }
