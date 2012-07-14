@@ -28,6 +28,8 @@
  **/
 public class IAPlayer:Player
 {
+	private Card planned_card = null;
+
 	/**
 	 * Receive a new hand, at the beginning of a game.
 	 **/
@@ -280,12 +282,35 @@ public class IAPlayer:Player
 	 **/
 	private Card attacker_open (int beginner, Card[] cards)
 	{
+		/* IF we planned to play a card at previous turn, play it */
+		if (planned_card != null)
+		{
+			Card c = planned_card;	
+			planned_card = null;
+			foreach (Card d in hand.list)
+			{
+				if (d.colour == c.colour && d.rank == c.rank - 1)
+				{
+					planned_card = d;
+				}
+			}
+
+			return c;
+		}
+
 		/* This is really simple. Either we have a king, or we play
-		   a crap. */
+		   a low card. */
 		foreach (Card c in hand.list)
 		{
 			if (c.rank == 14)
 			{
+				foreach (Card d in hand.list)
+				{
+					if (d.colour == c.colour && d.rank == c.rank - 1)
+					{
+						planned_card = d;
+					}
+				}
 				return c;
 			}
 		}
@@ -298,6 +323,9 @@ public class IAPlayer:Player
 	 **/
 	private Card attacker_follow (int beginner, Card[] cards)
 	{
+		/* We didn't win, so let's put planned_card to null in case */
+		planned_card = null;
+
 		Card selected_card = null;
 
 		/* Get a list of all playable cards */
