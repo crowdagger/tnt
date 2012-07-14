@@ -108,21 +108,30 @@ public class GraphicalPlayer:Player
 		for (int i = 0; i < cards.length; i++)
 		{
 			players_cards[i] = new Gtk.Image.from_file (((GraphicalCard)cards[i]).image_file);
-			if (i == winner && i == game.taker)
+			string name;
+			if (i == game.taker)
 			{
-				players_labels[i].set_markup ("<span color = \"#FF00FF\"><b>"+game.players[i].name+"</b></span>");
-			}
-			else if (i == winner)
-			{
-				players_labels[i].set_markup ("<span color = \"#0000FF\"><b>"+game.players[i].name+"</b></span>");
-			}
-			else if (i == game.taker)
-			{
-				players_labels[i].set_markup ("<span color = \"#FF0000\"><b>"+game.players[i].name+"</b></span>");
+				name = "☠ " + game.players[i].name + " ☠";
 			}
 			else
 			{
-				players_labels[i].set_markup ("<b>"+game.players[i].name+"</b>");
+				name = game.players[i].name;
+			}
+			if (i == winner && i == game.taker)
+			{
+				players_labels[i].set_markup ("<span color = \"#FF00FF\"><b>" + name+"</b></span>");
+			}
+			else if (i == winner)
+			{
+				players_labels[i].set_markup ("<span color = \"#0000FF\"><b>"+name+"</b></span>");
+			}
+			else if (i == game.taker)
+			{
+				players_labels[i].set_markup ("<span color = \"#FF0000\"><b>"+name+"</b></span>");
+			}
+			else
+			{
+				players_labels[i].set_markup ("<b>"+name+"</b>");
 			}
 
 			fixed.put (players_cards[i], PLAYERS_CARDS_POS[i,0], PLAYERS_CARDS_POS[i,1]);
