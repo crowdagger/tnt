@@ -3,3 +3,4 @@ Bugs:
   is counted as trump and must be used when you no longer have trumps.
 - Petit au bout, poignée, garde sans, garde contre are not handled.
 - program seems to freeze sometimes when IA has taken. Investigate.
+- When IA takes, we don't see the dog :(

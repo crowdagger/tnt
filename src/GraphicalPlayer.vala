@@ -108,7 +108,15 @@ public class GraphicalPlayer:Player
 		for (int i = 0; i < cards.length; i++)
 		{
 			players_cards[i] = new Gtk.Image.from_file (((GraphicalCard)cards[i]).image_file);
-			if (i == winner)
+			if (i == winner && i == game.taker)
+			{
+				players_labels[i].set_markup ("<span color = \"#FF00FF\"><b>"+game.players[i].name+"</b></span>");
+			}
+			else if (i == winner)
+			{
+				players_labels[i].set_markup ("<span color = \"#0000FF\"><b>"+game.players[i].name+"</b></span>");
+			}
+			else if (i == game.taker)
 			{
 				players_labels[i].set_markup ("<span color = \"#FF0000\"><b>"+game.players[i].name+"</b></span>");
 			}
