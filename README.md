@@ -1,16 +1,10 @@
 Tiny 'Nux Tarot
 ===============
 
-Warning
--------
-It's great if you want to test this, but currently it's really a
-pre-alpha version, so don't expect too much of either the software or
-its documentation, right?
-
 Features
 --------
 * Basic tarot rules implemented, but special cases are missing
-  ("poignee", "misere", "petit au bout")
+  ("poignee", "misere", "petit au bout", "garde sans")
   
 * Four-player (human or IA) only, but it's the most interesting.
 
@@ -18,11 +12,7 @@ Features
   computers. That's not really great because one player might see the
   hand of other ones, but well...  
   
-* Very limited IA: IA doesn't take, it can only defend.
-
-* No internalization, but a mixture of "frenglish" (interface is
-  supposed to be in english, but many tarot terms are only available
-  in french, or so it seems)
+* Very basic IA.
 
 * Bugs!
 
@@ -43,8 +33,8 @@ If you get the code from the git repository, you'll also need a vala
 compiler and the autotools, and to do the usual autotools mess before
 you can do the steps above.
 
-Using
------
+Running
+-------
 Simply typing:
 
     $ tnt
@@ -62,9 +52,14 @@ Or if you want to play with a friend, you can type:
 
     $ tnt 2 foo bar
     
-But actually you probably don't want to do that, since multi-player
-mode means having one additional instance of the game and the same
-computer and it's not really practical. 
+Playing
+-------
+See the rules on Wikipedia: http://en.wikipedia.org/wiki/French_tarot
+
+GUI is pretty basic: click on a card to play it or select/unselect it
+for your dog. Click the "OK" button at the end of the turn. The
+name of the player name who took is displayed in red (with skulls),
+the name of the one who won the precedent turn is displayed in blue.
 
 Contact
 -------
