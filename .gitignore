@@ -1,5 +1,8 @@
 *~
 *.c
+Makefile
+*.o
+stamp-h1
 Makefile.in
 config.h.in
 depcomp
@@ -11,3 +14,6 @@ autom4te.cache/
 configure
 install-sh
 *.stamp
+config.h
+config.log
+config.status
