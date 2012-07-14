@@ -204,68 +204,220 @@ public class IAPlayer:Player
 	 **/
 	public override void select_card (int beginner, Card[] cards)
 	{
-		Card selected_card = null;
+		/* Excuse if trump is play, else special routine */
+		Card selected_card = try_excuse (beginner, cards);
 
-		/* Get a list of all playable cards */
-		Gee.ArrayList<Card> possible_cards = hand.get_playable_cards (beginner, cards);
-
-		if (game.players[game.taker] == this)
+		if (selected_card == null)
 		{
-			/* We took. Not really handled, actually, so let's just
-			   give a card. */
-			selected_card = possible_cards[0];
-		}
-		else
-		{
-			/* We are among the defendants. 
-			   Very basic IA: determinate whether we are sure to take the
-			   hand (and give the card with greatest value), or if the
-			   opponents (might) have the upper hand (and give the card
-			   with lowest value. */
-			bool sure_to_win = false;
-			if (cards[game.taker] != null)
+			if (game.players[game.taker] == this)
 			{
-				/* Taker has already played, so determine if they win */
-				int winner = determine_winner (beginner, cards);
-
-				if (winner != game.taker)
-				{
-					sure_to_win = true;
-				}
-			}
-
-			if (sure_to_win)
-			{
-				/* Sure to win, put highest card */
-				selected_card = play_high_card (beginner, cards, possible_cards);
+				selected_card = attacker_move (beginner, cards);
 			}
 			else
 			{
-				/* Not sure to win, check if we got better */
-				if (cards[game.taker] != null)
-				{
-					double max_value = 0.0;
-					foreach (Card card in possible_cards)
-					{
-						if (card.is_better_than (cards[game.taker]))
-						{
-							selected_card = card;
-							max_value = card.value;
-						}
-					}
-				}
-				
-				/* If we can't put better, put the lowest */
-				if (selected_card == null)
-				{
-					selected_card = play_low_card (beginner, cards, possible_cards);
-				}
+				selected_card = defender_move (beginner, cards);
 			}
 		}
 		/* Give the selected card */
 		hand.list.remove (selected_card);
 		game.give_card (this, selected_card);
 	}
+
+	/**
+	 * Excuse oneself if trump is played 
+	 **/
+	private Card? try_excuse (int beginner, Card[] cards)
+	{
+		if (cards[beginner] == null)
+		{
+			return null;
+		}
+
+		if (cards[beginner].colour != Colour.TRUMP)
+		{
+			return null;
+		}
+
+		foreach (Card? card in cards)
+		{
+			if (card != null)
+			{
+				if (card.colour != Colour.TRUMP || card.rank == 1)
+				{
+					return null;
+				}
+			}
+		}
+		foreach (Card card in hand.list)
+		{
+			if (card.colour == Colour.TRUMP && card.rank == 0)
+			{
+				return card;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Select a card / attacker version
+	 **/
+	private Card attacker_move (int beginner, Card[] cards)
+	{
+		Card selected_card = null;
+		if (game.players[beginner] == this)
+		{
+		    selected_card = attacker_open (beginner, cards);
+		}
+		else
+		{
+			selected_card = attacker_follow (beginner, cards);
+		}
+		return selected_card;
+	}
+
+	/**
+	 * The attacker is opening... 
+	 **/
+	private Card attacker_open (int beginner, Card[] cards)
+	{
+		/* This is really simple. Either we have a king, or we play
+		   a crap. */
+		foreach (Card c in hand.list)
+		{
+			if (c.rank == 14)
+			{
+				return c;
+			}
+		}
+
+		return play_low_card (beginner, cards, hand.list);
+	}
+
+	/**
+	 * The attacker isn't opening...
+	 **/
+	private Card attacker_follow (int beginner, Card[] cards)
+	{
+		Card selected_card = null;
+
+		/* Get a list of all playable cards */
+		Gee.ArrayList<Card> possible_cards = hand.get_playable_cards (beginner, cards);
+
+		int nb_null = 0;
+		foreach (Card? c in cards)
+		{
+			if (c == null)
+			{
+				nb_null++;
+			}
+		}
+		stdout.printf("nb_null:%d\n", nb_null);
+		
+		/* If we are last to play, play a higlhy valued card if it wins */
+		if (nb_null == 1)
+		{
+			selected_card = play_high_if_wins (beginner, cards, possible_cards);
+		}
+
+		/* If we have a king, try playing it */
+		foreach (Card c in possible_cards)
+		{
+			if (c.rank == 14 && c.colour != Colour.TRUMP)
+			{
+				selected_card = c;
+			}
+		}
+			
+		/* Default: put the lowest */
+		if (selected_card == null)
+		{
+			selected_card = play_low_card (beginner, cards, possible_cards);
+		}			
+
+		return selected_card;
+	}
+
+	/**
+	 * Select a card / defender version
+	 **/
+	private Card defender_move (int beginner, Card[] cards)
+	{
+		Card selected_card = null;
+
+		/* Get a list of all playable cards */
+		Gee.ArrayList<Card> possible_cards = hand.get_playable_cards (beginner, cards);
+
+		/* We are among the defendants. 
+		   Very basic IA: determinate whether we are sure to take the
+		   hand (and give the card with greatest value), or if the
+		   opponents (might) have the upper hand (and give the card
+		   with lowest value. */
+		bool sure_to_win = false;
+		if (cards[game.taker] != null)
+		{
+			/* Taker has already played, so determine if they win */
+			int winner = determine_winner (beginner, cards);
+			
+			if (winner != game.taker)
+			{
+				sure_to_win = true;
+			}
+		}
+		
+		if (sure_to_win)
+		{
+			/* Sure to win, put highest card */
+			selected_card = play_high_card (beginner, cards, possible_cards);
+		}
+		else
+		{
+			/* Not sure to win, check if we got better */
+			if (cards[game.taker] != null)
+			{
+				selected_card = play_high_if_wins (beginner, cards, possible_cards);
+			}
+			
+			/* If we can't put better, put the lowest */
+			if (selected_card == null)
+			{
+				selected_card = play_low_card (beginner, cards, possible_cards);
+			}
+		}
+
+		return selected_card;
+	}
+
+	/**
+	 * Return the highest valuest card if it wins, or null otherwise
+	 **/
+	private Card play_high_if_wins (int beginner, Card[] cards, Gee.ArrayList<Card> possible_cards)
+	{
+		Card selected_card = null;
+		double max_value = 0.0;
+		int opponent;
+		if (game.players[game.taker] == this)
+		{
+			opponent = determine_winner (beginner, cards);
+		}
+		else
+		{
+			opponent = game.taker;
+		}
+		foreach (Card card in possible_cards)
+		{
+			if (card.is_better_than (cards[opponent]))
+			{
+				if (card.value > max_value)
+				{
+					selected_card = card;
+					max_value = card.value;
+				}
+			}
+		}
+
+		return selected_card;
+	}
+   
 
 	/**
 	 * Return the highest value card we can play
