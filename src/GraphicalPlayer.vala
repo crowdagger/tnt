@@ -51,6 +51,47 @@ public class GraphicalPlayer:Player
 	private int beginner;
 	private Card[] cards;
 
+
+	/**
+	 * Refresh players' names, that is, update the markup to reflect
+	 * who won last turn and who took this game
+	 *
+	 * Winner: the id of last turn winner, or -1 if n/a.
+	 **/
+	private void refresh_players_names (int winner)
+	{
+		string name;
+		
+		for (int i = 0; i < game.nb_players; i++)
+		{
+			if (i == game.taker)
+			{
+				name = "☠ " + game.players[i].name + " ☠";
+			}
+			else
+			{
+				name = game.players[i].name;
+			}
+			if (i == winner && i == game.taker)
+			{
+				players_labels[i].set_markup ("<span color = \"#FF00FF\"><b>" + name+"</b></span>");
+			}
+			else if (i == winner)
+			{
+				players_labels[i].set_markup ("<span color = \"#0000FF\"><b>"+name+"</b></span>");
+			}
+			else if (i == game.taker)
+			{
+				players_labels[i].set_markup ("<span color = \"#FF0000\"><b>"+name+"</b></span>");
+			}
+			else
+			{
+				players_labels[i].set_markup ("<b>"+name+"</b>");
+			}
+		}
+
+	}
+
 	/**
 	 * GraphicalPlayer constructor
 	 *
@@ -108,18 +149,12 @@ public class GraphicalPlayer:Player
 		for (int i = 0; i < cards.length; i++)
 		{
 			players_cards[i] = new Gtk.Image.from_file (((GraphicalCard)cards[i]).image_file);
-			if (i == winner)
-			{
-				players_labels[i].set_markup ("<span color = \"#FF0000\"><b>"+game.players[i].name+"</b></span>");
-			}
-			else
-			{
-				players_labels[i].set_markup ("<b>"+game.players[i].name+"</b>");
-			}
 
 			fixed.put (players_cards[i], PLAYERS_CARDS_POS[i,0], PLAYERS_CARDS_POS[i,1]);
 			players_cards[i].show ();
 		}
+		refresh_players_names (winner);
+
 		button = new Gtk.Button.with_label (game.players[winner].name + " won");
 		fixed.put (button, BUTTON_POS[0], BUTTON_POS[1]);
 		button.clicked.connect (clear_cards);
@@ -246,6 +281,9 @@ public class GraphicalPlayer:Player
 		dialog.show_all ();
 	}
 
+	/**
+	 * Show the dog
+	 **/
 	public override void receive_dog (Hand dog)
 	{
 		g_dog = new GraphicalHand (dog);
@@ -253,7 +291,17 @@ public class GraphicalPlayer:Player
 		
 		button = new Gtk.Button.with_label ("OK");
 		fixed.put (button, BUTTON_POS[0], BUTTON_POS[1]);
-		button.clicked.connect (add_to_dog);
+		
+		/* If the player took, she gets the dogs; else, she only sees
+		   it. */
+		if (game.players[game.taker] == this)
+		{
+			button.clicked.connect (add_to_dog);
+		}
+		else
+		{
+			button.clicked.connect (ack_dog);
+		}
 		button.show ();
 	}
 
@@ -279,6 +327,21 @@ public class GraphicalPlayer:Player
 		}
 		g_hand.refresh (hand);			
 	}
+
+	/**
+	 * Acknowledge that the player have seen the dog.
+	 **/
+	public void ack_dog ()
+	{
+		button.destroy ();
+		button = null;
+		g_dog.destroy ();
+		g_dog = null;
+		this.refresh_players_names (-1);
+		
+		game.give_dog (this, null);
+	}
+
 
 	/**
 	 * Check that there are six cards in the dog, and if ok, send them
@@ -324,6 +387,7 @@ public class GraphicalPlayer:Player
 			foreach (Card c in dog.list)
 				hand.list.remove (c);
 			g_hand.refresh (hand);
+			this.refresh_players_names (-1);
 			game.give_dog (this, dog);
 		}
 	}
