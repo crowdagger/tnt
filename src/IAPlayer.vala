@@ -38,10 +38,63 @@ public class IAPlayer:Player
 
 	/**
 	 * Select a bid
+	 *
+	 * The idea is to evaluate a hand, and according to the player, take or not.
+	 *
+	 * TODO: Evaluation should be based on
+	 * http://en.wikipedia.org/wiki/French_tarot#Evaluating_one.27s_hand  
 	 **/
 	public override void select_bid (Bid max_bid = Bid.PASSE)
 	{
-		game.give_bid (this, Bid.PASSE);
+		/* First, determine the score */
+		double value = 0.0;
+		int oudlers = 0;
+		Bid preferred_bid = Bid.PASSE;
+		foreach (Card c in this.hand.list)
+		{
+			value += c.value;
+			if (c.is_oudler ())
+			{
+				oudlers += 1;
+			}
+		}
+
+		stdout.printf ("%s's value = %f\n", this.name, value);
+
+		/* Second, according to the score, determine if the player
+		 * takes or not. TODO: this should be based on parameters, so
+		 * different IA players don't behave in the same way.
+		 */
+		value = 10 * oudlers + value;
+		if (value > 55)
+		{
+			preferred_bid = Bid.GARDE_CONTRE;
+		}
+		else if (value > 45)
+		{
+			preferred_bid = Bid.GARDE_SANS;
+		}
+		else if (value > 35)
+		{
+			preferred_bid = Bid.GARDE;
+		}
+		else if (value > 25)
+		{
+			preferred_bid = Bid.PETITE;
+		}
+		else
+		{
+			preferred_bid = Bid.PASSE;
+		}
+		
+		if (preferred_bid > max_bid)
+		{
+			game.give_bid (this, preferred_bid);
+		}
+		else
+		{
+			game.give_bid (this, Bid.PASSE);
+		}
 	}
 
 	/**

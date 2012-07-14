@@ -1,6 +1,6 @@
 # configure.ac
 
-AC_INIT([TnT],[0.1])
+AC_INIT([TnT],[0.2])
 AC_CONFIG_SRCDIR([src/main.vala])
 AC_CONFIG_HEADERS([config.h])
 
