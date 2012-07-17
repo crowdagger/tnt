@@ -27,7 +27,7 @@
  **/
 public enum Colour 
   {
-    SPADE, HEART, DIAMOND, CLUB, TRUMP;
+	  SPADE, HEART, CLUB, DIAMOND, TRUMP;
     
     public string to_string ()
     {
@@ -56,6 +56,6 @@ public enum Colour
 
 	public static Colour[] all ()
 	{
-		return {SPADE, HEART, DIAMOND, CLUB, TRUMP};
+		return {SPADE, HEART, CLUB, DIAMOND, TRUMP};
 	}
 }
