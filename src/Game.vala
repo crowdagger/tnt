@@ -351,6 +351,7 @@ public class Game:GLib.Object
 			for (int i = 0; i < played_cards.length; i++)
 			{
 				/* Excuse is always particular */
+				/* TODO: handle excuse at last turn */
 				assert (played_cards[i] != null);
 				if (played_cards[i].colour == Colour.TRUMP && played_cards[i].rank == 0)
 				{
@@ -402,6 +403,33 @@ public class Game:GLib.Object
 			}
 			else
 			{
+				/* End of the game. Compute the scores and display them */
+				// /* TODO: make this a separate method */
+				// /* First, handle the excuse */
+				// /* Actually, this is quite bugged: this should only be done when
+				//    the person who used the excuse didn't win the turn. */
+				// Hand who_has_excuse = defenders_stack;
+				// Hand who_hasnt = taker_stack;
+				// foreach (Card c in taker_stack.list)
+				// {
+				// 	if (c.colour == Colour.TRUMP && c.rank == 0)
+				// 	{
+				// 		who_has_excuse = taker_stack;
+				// 		who_hasnt = defenders_stack;
+				// 		break;
+				// 	}
+				// }
+
+				// foreach (Card c in who_has_excuse.list)
+				// {
+				// 	if (c.value == 0.5)
+				// 	{
+				// 		who_hasnt.add (c);
+				// 		who_hasnt.remove (c);
+				// 		break;
+				// 	}
+				// }
+
 				double score = taker_stack.get_score ();
 				string message = "%s has %f points with %d oudlers.\n".printf (players[taker].name, taker_stack.get_value (), taker_stack.get_nb_oudlers ());
 				message += "%s scores %f points.\n".printf (players[taker].name, score);
@@ -433,6 +461,9 @@ public class Game:GLib.Object
 
 				var dialog = new Gtk.MessageDialog (null,Gtk.DialogFlags.MODAL,Gtk.MessageType.INFO, Gtk.ButtonsType.OK, message); 
 				dialog.set_title("Scores");
+				var g_taker = new GraphicalHand (taker_stack);
+				var area = dialog.get_action_area ();
+				((Gtk.Container)area).add (g_taker);
 				dialog.run();
 				dialog.destroy ();
 				end_game ();
