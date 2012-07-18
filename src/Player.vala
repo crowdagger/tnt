@@ -28,7 +28,7 @@
 public abstract class Player:GLib.Object
 {
 	public string name {get; protected set;}
-	public double score {get; set;}
+	public int score {get; set;}
 	public Hand hand;
 	public weak Game game;
 
@@ -59,7 +59,7 @@ public abstract class Player:GLib.Object
 	public Player (Game game, string? name = null)
 	{
 		hand = new Hand ();
-		score = 0.0;
+		score = 0;
 		this.game = game;
 
 		this.name = name;

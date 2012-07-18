@@ -462,12 +462,12 @@ public class Game:GLib.Object
 					if (i == taker)
 					{
 						turn_scores[i] = (int) (score * (nb_players -1));
-						players[i].score += score * (nb_players -1);
+						players[i].score += (int) (score * (nb_players -1));
 					}
 					else
 					{
 						turn_scores[i] = (int) (0-score);
-						players[i].score -= score;
+						players[i].score -= (int) score;
 					}
 					message += "%s \t %f\n".printf (players[i].name, players[i].score);
 				}
