@@ -27,10 +27,13 @@ public class Scores:Gtk.TreeView
 {
 	private Gtk.ListStore store;
 	private int nb_cols;
+	private Gtk.TreeIter total;
+	private Game game;
 
-	public Scores (string[] players_names)
+	public Scores (Game game)
 	{
-		nb_cols = players_names.length;
+		this.game = game;
+		nb_cols = game.nb_players;
 
 		/* Sets store */
 		GLib.Type[] types = new GLib.Type[nb_cols];
@@ -39,16 +42,24 @@ public class Scores:Gtk.TreeView
 			t = typeof (string);
 		}
 		//store = new Gtk.ListStore.newv (types);
+		/* TODO: make varialbe list */
 		store = new Gtk.ListStore (nb_cols, typeof(string), typeof (string), typeof (string), typeof (string));
 		assert (store != null);
 		this.set_model (store);
 
 		/* Add renderer and columns */
 		Gtk.CellRenderer renderer = new Gtk.CellRendererText ();
-		for (int i = 0; i < players_names.length; i++)
+		for (int i = 0; i < game.nb_players; i++)
 		{
-			Gtk.TreeViewColumn column = new Gtk.TreeViewColumn.with_attributes (players_names[i], renderer, "text", i);
+			Gtk.TreeViewColumn column = new Gtk.TreeViewColumn.with_attributes (game.players[i].name, renderer, "text", i);
 			this.append_column (column);
+		}
+
+		/* Add the total iter */
+		store.append (out total);
+		for (int i = 0; i < nb_cols; i++)
+		{
+			store.set (total, i, "0");
 		}
 	}
 
@@ -59,10 +70,11 @@ public class Scores:Gtk.TreeView
 	{
 		assert (scores.length == nb_cols);
 		Gtk.TreeIter iter;
-		store.append (out iter);
+		store.insert_before (out iter, total);
 		for (int i = 0; i < nb_cols; i++)
 		{
 			store.set (iter, i, scores[i].to_string ());
+			store.set (total, i, game.players[i].score.to_string ());
 		}
 	}
 }

@@ -154,7 +154,7 @@ public class Game:GLib.Object
 		}
 
 		/* Initialize scores with the names of players */
-		scores = new Scores (names);
+		scores = new Scores (this);
 		var window = new Gtk.Window ();
 		window.add (scores);
 		window.show_all ();
