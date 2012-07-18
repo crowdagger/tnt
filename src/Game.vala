@@ -42,6 +42,8 @@ public class Game:GLib.Object
 	private Hand dog;
 	private int nb_approvals;
 	private Scores scores;
+	private Hand card_due_for_excuse;
+
 	/**
 	 * Initialize all cards. If graphical is not set to true, the game
 	 * won't possibly run graphically.
@@ -101,6 +103,7 @@ public class Game:GLib.Object
 		nb_players = 4;
 		nb_turns = 18;
 		starter = 0;
+		card_due_for_excuse = null;
 
 		players_bids = new Bid[nb_players];
 		taker_stack = new Hand ();
@@ -358,17 +361,24 @@ public class Game:GLib.Object
 			for (int i = 0; i < played_cards.length; i++)
 			{
 				/* Excuse is always particular */
-				/* TODO: handle excuse at last turn */
 				assert (played_cards[i] != null);
-				if (played_cards[i].colour == Colour.TRUMP && played_cards[i].rank == 0)
+				if (played_cards[i].colour == Colour.TRUMP && played_cards[i].rank == 0 && current_turn != nb_turns - 1)
 				{
 					if (i == taker)
 					{
 						taker_stack.add (played_cards[i]);
+						if (i != winner)
+						{
+							card_due_for_excuse = taker_stack;
+						}
 					}
 					else
 					{
 						defenders_stack.add (played_cards[i]);
+						if (winner == taker)
+						{
+							card_due_for_excuse = defenders_stack;
+						}
 					}
 				}
 				else
@@ -411,31 +421,34 @@ public class Game:GLib.Object
 			else
 			{
 				/* End of the game. Compute the scores and display them */
-				// /* TODO: make this a separate method */
-				// /* First, handle the excuse */
-				// /* Actually, this is quite bugged: this should only be done when
-				//    the person who used the excuse didn't win the turn. */
-				// Hand who_has_excuse = defenders_stack;
-				// Hand who_hasnt = taker_stack;
-				// foreach (Card c in taker_stack.list)
-				// {
-				// 	if (c.colour == Colour.TRUMP && c.rank == 0)
-				// 	{
-				// 		who_has_excuse = taker_stack;
-				// 		who_hasnt = defenders_stack;
-				// 		break;
-				// 	}
-				// }
 
-				// foreach (Card c in who_has_excuse.list)
-				// {
-				// 	if (c.value == 0.5)
-				// 	{
-				// 		who_hasnt.add (c);
-				// 		who_hasnt.remove (c);
-				// 		break;
-				// 	}
-				// }
+				/* First, check if we need to give another card to
+				   balance the excuse we keppt */
+				if (card_due_for_excuse != null)
+				{
+					Hand receiver_stack;
+					if (card_due_for_excuse == taker_stack)
+					{
+						receiver_stack = defenders_stack;
+					}
+					else
+					{
+						receiver_stack = taker_stack;
+					}
+
+					foreach (Card c in card_due_for_excuse.list)
+					{
+						/* Give the first card with no special value */
+						if (c.value == 0.5)
+						{
+							receiver_stack.add (c);
+							card_due_for_excuse.remove (c);
+							break;
+						}
+					}
+
+					card_due_for_excuse = null;
+				}
 
 				double score = taker_stack.get_score ();
 				string message = "%s has %f points with %d oudlers.\n".printf (players[taker].name, taker_stack.get_value (), taker_stack.get_nb_oudlers ());
