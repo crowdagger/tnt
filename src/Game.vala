@@ -41,6 +41,7 @@ public class Game:GLib.Object
 	private Bid[] players_bids; 
 	private Hand dog;
 	private int nb_approvals;
+	private Scores scores;
 	/**
 	 * Initialize all cards. If graphical is not set to true, the game
 	 * won't possibly run graphically.
@@ -151,6 +152,12 @@ public class Game:GLib.Object
 				players[i] = new IAPlayer (this, names[i]);
 			}
 		}
+
+		/* Initialize scores with the names of players */
+		scores = new Scores (names);
+		var window = new Gtk.Window ();
+		window.add (scores);
+		window.show_all ();
 	}
 
 	/*
@@ -446,24 +453,32 @@ public class Game:GLib.Object
 				}
 				assert(players_bids[taker] != Bid.NULL);
 				score *= players_bids[taker].get_multiplier ();
+				
+				/* Add scores to the scores object */
+				int[] turn_scores = new int[nb_players];
+
 				for (int i = 0; i < nb_players; i++)
 				{
 					if (i == taker)
 					{
+						turn_scores[i] = (int) (score * (nb_players -1));
 						players[i].score += score * (nb_players -1);
 					}
 					else
 					{
+						turn_scores[i] = (int) (0-score);
 						players[i].score -= score;
 					}
 					message += "%s \t %f\n".printf (players[i].name, players[i].score);
 				}
+				scores.add_scores (turn_scores);
 
 				var dialog = new Gtk.MessageDialog (null,Gtk.DialogFlags.MODAL,Gtk.MessageType.INFO, Gtk.ButtonsType.OK, message); 
 				dialog.set_title("Scores");
 				var g_taker = new GraphicalHand (taker_stack);
 				var area = dialog.get_action_area ();
-				((Gtk.Container)area).add (g_taker);
+//				((Gtk.Container)area).add (g_taker);
+				((Gtk.Container)area).add (scores);
 				dialog.run();
 				dialog.destroy ();
 				end_game ();
