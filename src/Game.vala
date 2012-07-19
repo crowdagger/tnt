@@ -449,21 +449,26 @@ public class Game:GLib.Object
 				}
 
 				double score = taker_stack.get_score ();
-				string message = "%s has %f points with %d oudlers.\n".printf (players[taker].name, taker_stack.get_value (), taker_stack.get_nb_oudlers ());
-				message += "%s scores %f points.\n".printf (players[taker].name, score);
-				message += "\n*** Scores ***\n";
-
+				string message = "%d points with %d oudlers\n".printf ((int) taker_stack.get_value (), taker_stack.get_nb_oudlers ());
+				message += "Required score: %d\n".printf (taker_stack.required_score ());
+				message += "Difference: %d\n".printf ((int) (taker_stack.get_value () - taker_stack.required_score ()));
+					
 				/* Compute new scores and display them */
 				if (score >= 0)
 				{
 					score += 25;
+					message += "Winning bonus: 25\n";
 				}
 				else
 				{
 					score -= 25;
+					message += "Losing malus: -25\n";
 				}
 				assert(players_bids[taker] != Bid.NULL);
+					
+				message += "Bid: %s; multiplier: %d\n".printf (players_bids[taker].to_string (), (int) players_bids[taker].get_multiplier ());
 				score *= players_bids[taker].get_multiplier ();
+				message += "Total: %d\n".printf((int) score);
 				
 				/* Add scores to the scores object */
 				int[] turn_scores = new int[nb_players];
@@ -480,7 +485,7 @@ public class Game:GLib.Object
 						turn_scores[i] = (int) (0-score);
 						players[i].score -= (int) score;
 					}
-					message += "%s \t %f\n".printf (players[i].name, players[i].score);
+					message += "%s \t %d\n".printf (players[i].name, (int)players[i].score);
 				}
 				scores.add_scores (turn_scores);
 

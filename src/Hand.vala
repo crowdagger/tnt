@@ -140,13 +140,13 @@ public class Hand:Object
 	}
 
 	/**
-	 * Get score, depending of value of the game and numbers of oudlers
+	 * Get the required score to win according to the number of oudlers 
 	 **/
-	public double get_score ()
+	public int required_score ()
 	{
-		double value = get_value ();
 		int oudlers = get_nb_oudlers ();
-		double threshold = 0.0;
+		int threshold;
+		
 		switch (oudlers)
 		{
 		case 0:
@@ -164,6 +164,17 @@ public class Hand:Object
 		default:
 			assert_not_reached ();
 		}
+		
+		return threshold;
+	}
+
+	/**
+	 * Get score, depending of value of the game and numbers of oudlers
+	 **/
+	public double get_score ()
+	{
+		double value = get_value ();
+		double threshold = required_score ();
 		return value - threshold;
 	}
 
