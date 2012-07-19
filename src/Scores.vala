@@ -21,6 +21,26 @@
 ***********************************************************************/
 
 /**
+ * Callback for TreeViewColumn
+ **/
+void data_func (Gtk.CellLayout layout, Gtk.CellRendererText renderer, Gtk.TreeModel model, Gtk.TreeIter iter)
+{
+	GLib.Value value;
+	model.get_value (iter, 4, out value);
+	string content = value.get_string ();
+	int i = int.parse (content);
+	
+	if (i == 1)
+	{
+		renderer.cell_background = "#FF00FF";
+	}
+	else
+	{
+		renderer.cell_background = "#FFFFFF";
+	}
+}
+
+/**
  * This class allows to manages score and to display them in a table.
  **/
 public class Scores:Gtk.TreeView
@@ -44,17 +64,22 @@ public class Scores:Gtk.TreeView
 		}
 		//store = new Gtk.ListStore.newv (types);
 		/* TODO: make varialbe list */
-		store = new Gtk.ListStore (nb_cols, typeof(string), typeof (string), typeof (string), typeof (string));
+		store = new Gtk.ListStore (nb_cols + 1, typeof(string), typeof (string), typeof (string), typeof (string), typeof (string));
 		assert (store != null);
 		this.set_model (store);
 
 		/* Add renderer and columns */
-		Gtk.CellRenderer renderer = new Gtk.CellRendererText ();
+		Gtk.CellRendererText renderer = new Gtk.CellRendererText ();
+		renderer.set_sensitive (false);
 		for (int i = 0; i < game.nb_players; i++)
 		{
 			Gtk.TreeViewColumn column = new Gtk.TreeViewColumn.with_attributes (names[i], renderer, "text", i);
 			this.append_column (column);
+			column.set_cell_data_func (renderer, (Gtk.CellLayoutDataFunc) data_func);
 		}
+		Gtk.TreeViewColumn invisible_column = new Gtk.TreeViewColumn.with_attributes ("Invisible anyway", renderer, "text", game.nb_players);
+		invisible_column.set_visible (false);
+		this.append_column (invisible_column);
 
 		/* Add the total iter */
 		store.append (out total);
@@ -62,6 +87,8 @@ public class Scores:Gtk.TreeView
 		{
 			store.set (total, i, "0");
 		}
+		store.set (total, nb_cols, "1");
+		this.set_sensitive (false);
 	}
 
 	/**
@@ -77,5 +104,7 @@ public class Scores:Gtk.TreeView
 			store.set (iter, i, scores[i].to_string ());
 			store.set (total, i, game.players[i].score.to_string ());
 		}
+		store.set (iter, nb_cols, "0");
+		store.set (total, nb_cols, "1");
 	}
 }
