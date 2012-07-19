@@ -36,6 +36,7 @@ public class GraphicalPlayer:Player
 	private GraphicalHand g_dog;
 	private Gtk.Label[] players_labels;
 	private Gtk.Image[] players_cards;
+	private Gtk.Box hbox;
 
 	/* Const parameters for the positions of differents elements */
 	private static const int[] WINDOW_SIZE = {600,600};
@@ -109,10 +110,16 @@ public class GraphicalPlayer:Player
 		window.set_default_size (WINDOW_SIZE[0], WINDOW_SIZE[1]);
 		window.window_position = Gtk.WindowPosition.CENTER;
 		window.destroy.connect (Gtk.main_quit);
+
+		/* Initialize the hbox */
+		hbox = new Gtk.HBox (false, 10);
+		window.add (hbox);
 	   
 		/* Initialize the fixed */
 		fixed = new Gtk.Fixed ();
-		window.add (fixed);
+		hbox.add (fixed);
+
+		hbox.add (game.scores);
 
 		/* Initialize the hand */
 		g_hand = new GraphicalHand (hand);

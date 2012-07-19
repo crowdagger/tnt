@@ -30,7 +30,9 @@ public class Game:GLib.Object
 	public int nb_players {get; private set;}
 	public Hand taker_stack {get; private set;}
 	public Hand defenders_stack {get; private set;}
-	public int taker;
+	public int taker {get; private set;}
+	public Scores scores {get; private set;}
+
 
 	private int current_turn;
 	private int nb_turns;
@@ -41,7 +43,6 @@ public class Game:GLib.Object
 	private Bid[] players_bids; 
 	private Hand dog;
 	private int nb_approvals;
-	private Scores scores;
 	private Hand card_due_for_excuse;
 
 	/**
@@ -144,6 +145,9 @@ public class Game:GLib.Object
 			}
 		}
 
+		/* Initialize scores with the names of players */
+		scores = new Scores (this, names);
+
 		for (int i = 0; i < 4; i++)
 		{
 			if (i < nb_humans)
@@ -155,12 +159,6 @@ public class Game:GLib.Object
 				players[i] = new IAPlayer (this, names[i]);
 			}
 		}
-
-		/* Initialize scores with the names of players */
-		scores = new Scores (this);
-		var window = new Gtk.Window ();
-		window.add (scores);
-		window.show_all ();
 	}
 
 	/*
@@ -488,10 +486,6 @@ public class Game:GLib.Object
 
 				var dialog = new Gtk.MessageDialog (null,Gtk.DialogFlags.MODAL,Gtk.MessageType.INFO, Gtk.ButtonsType.OK, message); 
 				dialog.set_title("Scores");
-				var g_taker = new GraphicalHand (taker_stack);
-				var area = dialog.get_action_area ();
-//				((Gtk.Container)area).add (g_taker);
-				((Gtk.Container)area).add (scores);
 				dialog.run();
 				dialog.destroy ();
 				end_game ();
