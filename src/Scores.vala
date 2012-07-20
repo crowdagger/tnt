@@ -89,6 +89,7 @@ public class Scores:Gtk.TreeView
 		}
 		store.set (total, nb_cols, "1");
 		this.set_sensitive (false);
+		this.set_grid_lines (Gtk.TreeViewGridLines.BOTH);
 	}
 
 	/**

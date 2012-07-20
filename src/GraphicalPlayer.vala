@@ -39,7 +39,7 @@ public class GraphicalPlayer:Player
 	private Gtk.Box hbox;
 
 	/* Const parameters for the positions of differents elements */
-	private static const int[] WINDOW_SIZE = {600,600};
+	private static const int[] WINDOW_SIZE = {800,600};
 	private static const int[] HAND_POS = {50, 450};
 	private static const int[] DOG_POS = {250, 250};
 	private static const int[] BUTTON_POS = {300, 400};
@@ -119,7 +119,10 @@ public class GraphicalPlayer:Player
 		fixed = new Gtk.Fixed ();
 		hbox.add (fixed);
 
-		hbox.add (game.scores);
+		var win = new Gtk.ScrolledWindow (null, null);
+		win.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+		win.add (game.scores);
+		hbox.add (win);
 
 		/* Initialize the hand */
 		g_hand = new GraphicalHand (hand);
