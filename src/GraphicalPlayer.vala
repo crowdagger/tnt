@@ -109,7 +109,7 @@ public class GraphicalPlayer:Player
 		window.title = name;
 		window.set_default_size (WINDOW_SIZE[0], WINDOW_SIZE[1]);
 		window.window_position = Gtk.WindowPosition.CENTER;
-		window.destroy.connect (Gtk.main_quit);
+		window.destroy.connect (() => {tnt.quit ();});
 
 		/* Initialize the hbox */
 		hbox = new Gtk.HBox (false, 10);

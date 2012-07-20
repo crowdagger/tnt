@@ -12,7 +12,9 @@ tnt_SOURCES = \
 	Hand.vala \
 	IAPlayer.vala \
 	Player.vala \
-	Scores.vala
+	Scores.vala \
+	Tnt.vala \
+	About.vala
 
 INCLUDES = \
 	-include config.h \

@@ -120,29 +120,28 @@ public class Game:GLib.Object
 	/**
 	 * Initialize players
 	 **/
-	public void init_players (string[] args)
+	public void init_players (string[]? _names, bool[]? _humans)
 	{
-		int nb_humans = 1;
-		string[] names = {"Player 1", "Player 2", "Player 3", "Player 4"};
-
-		/* If one argument is passed, first argument is number of
-		 * human players */
-		if (args.length > 1)
+		string[] names;
+		bool[] humans;
+		if (_names == null)
 		{
-			nb_humans = int.parse(args[1]);
-			if (nb_humans < 0)
-				nb_humans = 0;
-			if (nb_humans > 4)
-				nb_humans = 4;
+			names = {"Player 1", "Player 2", "Player 3", "Player 4"};
 		}
-		
-		/* Other arguments are names of players (4 max) */
-		if (args.length > 2)
+		else
 		{
-			for (int i = 2; i < (args.length > 6? 6:args.length); i++)
-			{
-				names[i-2] = args[i];
-			}
+			assert (_names.length == nb_players);
+			names = _names;
+		}
+
+		if (_humans == null)
+		{
+			humans = {true, false, false, false};
+		}
+		else
+		{
+			assert (_humans.length == nb_players);
+			humans = _humans;
 		}
 
 		/* Initialize scores with the names of players */
@@ -150,7 +149,7 @@ public class Game:GLib.Object
 
 		for (int i = 0; i < 4; i++)
 		{
-			if (i < nb_humans)
+			if (humans[i])
 			{
 				players[i] = new GraphicalPlayer (this, names[i]);
 			}

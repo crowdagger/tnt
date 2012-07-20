@@ -20,17 +20,26 @@
 
 ***********************************************************************/
 
-
-using Gtk;
-
-public static Tnt tnt;
-
-int main (string[] args)
+/**
+ * Displays the About dialog. Really all the core algorithms are in this class.
+ **/
+public class About:Gtk.AboutDialog
 {
-	Gtk.init (ref args);
-	tnt = new Tnt ();
-	
-	tnt.run (args);
-	Gtk.main ();
-    return 0;
+	public About ()
+	{
+		set_program_name (Config.PACKAGE_STRING);
+		set_version (Config.PACKAGE_VERSION);
+		set_authors ({"Élisabeth Henry"});
+		set_license_type (Gtk.License.GPL_2_0);
+		set_wrap_license (true);
+		set_copyright ("©2011-2012, Élisabeth Henry.\n This is free software; see License for more information.");
+	}
+
+	/**
+	 * Delete the dialog when we get a response (ie, "close")
+	 **/
+	public override void response (int response_id)
+	{
+		this.destroy ();
+	}
 }
