@@ -50,11 +50,10 @@ public class Scores:Gtk.TreeView
 	private Gtk.TreeIter total;
 	private Game game;
 
-	public Scores (Game game, string[] names)
+	public Scores (Game game)
 	{
 		this.game = game;
 		nb_cols = game.nb_players;
-		assert (nb_cols == names.length);
 
 		/* Sets store */
 		GLib.Type[] types = new GLib.Type[nb_cols];
@@ -73,7 +72,7 @@ public class Scores:Gtk.TreeView
 		renderer.set_sensitive (false);
 		for (int i = 0; i < game.nb_players; i++)
 		{
-			Gtk.TreeViewColumn column = new Gtk.TreeViewColumn.with_attributes (names[i], renderer, "text", i);
+			Gtk.TreeViewColumn column = new Gtk.TreeViewColumn.with_attributes ("", renderer, "text", i);
 			this.append_column (column);
 			column.set_cell_data_func (renderer, (Gtk.CellLayoutDataFunc) data_func);
 		}
@@ -107,5 +106,17 @@ public class Scores:Gtk.TreeView
 		}
 		store.set (iter, nb_cols, "0");
 		store.set (total, nb_cols, "1");
+	}
+
+	/**
+	 * Refresh total scores and names
+	 **/
+	public void refresh ()
+	{
+		for (int i = 0; i < nb_cols; i++)
+		{
+			store.set (total, i, game.players[i].score.to_string ());
+			get_column (i).set_title (game.players[i].name);
+		}
 	}
 }

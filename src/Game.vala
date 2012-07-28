@@ -115,6 +115,10 @@ public class Game:GLib.Object
 		
 		init_values ();
 		init_cards (graphical);
+		/* Initialize scores */
+		scores = new Scores (this);
+
+
 	}
 
 	/**
@@ -144,9 +148,6 @@ public class Game:GLib.Object
 			humans = _humans;
 		}
 
-		/* Initialize scores with the names of players */
-		scores = new Scores (this, names);
-
 		for (int i = 0; i < 4; i++)
 		{
 			if (humans[i])
@@ -158,6 +159,7 @@ public class Game:GLib.Object
 				players[i] = new IAPlayer (this, names[i]);
 			}
 		}
+		scores.refresh ();
 	}
 
 	/*
@@ -512,6 +514,7 @@ public class Game:GLib.Object
 				dialog.set_title("Scores");
 				dialog.run();
 				dialog.destroy ();
+				this.save (stdout);
 				end_game ();
 			}
 		}
@@ -549,5 +552,31 @@ public class Game:GLib.Object
 		}
 			
 		return true;
+	}
+
+	/**
+	 * Save the current state of the game to a file 
+	 **/
+	public void save (GLib.FileStream stream)
+	{
+		foreach (Player p in players)
+		{
+			p.save (stream);
+		}
+		//scores.save (stream);
+		
+	}
+
+	/**
+	 * Load a game status 
+	 **/
+	public void load (GLib.FileStream stream)
+	{
+		for (int i = 0; i < nb_players; i++)
+		{
+			players[i] = Player.load (this, stream);
+			/* Sets columns of the TreeView */
+		}
+		scores.refresh ();
 	}
 }

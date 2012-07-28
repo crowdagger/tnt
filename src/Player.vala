@@ -27,10 +27,10 @@
  **/
 public abstract class Player:GLib.Object
 {
-	public string name {get; protected set;}
-	public int score {get; set;}
+	public string name {get; construct set;}
+	public int score {get; construct set;}
 	public Hand hand;
-	public weak Game game;
+	public weak Game game {get; construct set;}
 
 	/* Informs of the cards */
 	public abstract void receive_hand (Hand hand);
@@ -58,10 +58,50 @@ public abstract class Player:GLib.Object
 	
 	public Player (Game game, string? name = null)
 	{
-		hand = new Hand ();
-		score = 0;
-		this.game = game;
+		Object (score: 0, game:game, name:name);
 
-		this.name = name;
+	}
+	construct {
+		hand = new Hand ();
+	}
+
+	
+
+	/**
+	 * Save the current state of the player to a file 
+	 **/
+	public void save (GLib.FileStream stream)
+	{
+		stream.printf ("%s\n", this.get_type ().name ());
+		stream.printf ("%s\n", this.name);
+		stream.printf ("%d\n", this.score);
+	}
+
+	/**
+	 * Read from a file and sets a Player object 
+	 **/
+	public static Player? load (Game game, GLib.FileStream stream)
+	{
+		string str_type = stdin.read_line ();
+		string name = stream.read_line ();
+		int score = int.parse (stream.read_line ());
+		Player player;
+		if (str_type == "GraphicalPlayer")
+		{
+			player = new GraphicalPlayer (game, name);
+		}
+		else if (str_type == "IAPlayer")
+		{ 
+			player = new IAPlayer (game, name);
+		}
+		else
+		{
+			stdout.printf ("Error loading player from file\n");
+			return null;
+		}
+		
+		player.score = score;
+
+		return player;
 	}
 }

@@ -100,10 +100,13 @@ public class GraphicalPlayer:Player
 	 **/
 	public GraphicalPlayer (Game game, string? name = null)
 	{
-		base (game, name);
+		Object (score: 0, game: game, name: name);
+	}
+
+	construct {
 		button = null; 
 		g_dog = null;
-
+		
 		/* Initialize the window */
 		window = new Gtk.Window ();
 		window.title = name;

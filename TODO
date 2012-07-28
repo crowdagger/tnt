@@ -1,7 +1,7 @@
 Bugs:
 - excuse not properly handled: no card is given in exchange, plus it
   is counted as trump and must be used when you no longer have trumps.
-- Petit au bout, poignée, garde sans, garde contre are not handled.
+- Petit au bout, poignée are not handled.
 
 TODO:
 - better IA

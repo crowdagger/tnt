@@ -80,12 +80,14 @@ public class Tnt:Gtk.Application
 		new_game.activate.connect (() =>
 			{
 				Game tnt_game = new Game ();
+//				tnt_game.load (stdin);
 				tnt_game.init_players (names, human);
-				tnt_game.distribute ();
 				if (this.window != null)
 				{
 					this.window.hide ();
 				}
+				tnt_game.distribute ();
+
 			});
 		game_submenu.append (new_game);
 		Gtk.MenuItem preferences = new Gtk.MenuItem.with_label ("Preferences");
