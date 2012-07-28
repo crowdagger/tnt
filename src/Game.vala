@@ -267,12 +267,32 @@ public class Game:GLib.Object
 				dialog.run();
 				dialog.destroy ();
 
-				nb_approvals = 0;
-				foreach (Player p in players)
+				if (max_bid < Bid.GARDE_SANS)
 				{
-					p.receive_dog (dog);
+					/* We need to show the players the dog, and wait until the taker has it done */
+					nb_approvals = 0;
+					foreach (Player p in players)
+					{
+						p.receive_dog (dog);
+					}
+					dog = null;
 				}
-				dog = null;
+				else
+				{
+					/* Start the game already */
+					if (max_bid == Bid.GARDE_SANS)
+					{
+						taker_stack.take_all (dog);
+					}
+					else
+					{
+						defenders_stack.take_all (dog);
+					}
+					nb_approvals = 0;
+					current_player = starter;
+					players[current_player].select_card (current_player, played_cards);
+				}
+
 			}
 			else
 			{
@@ -521,7 +541,6 @@ public class Game:GLib.Object
 		}
 
 		nb_approvals++;
-		
 		if (nb_approvals == nb_players)
 		{
 			nb_approvals = 0;
