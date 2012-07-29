@@ -78,7 +78,7 @@ public class GraphicalHand:Gtk.VBox
 			}
 			
 			fixed.put (box, x, y);
-			x += 30;
+			x +=  (int) (500 / this.hand.list.size);
 		}
 
 		this.show_all ();

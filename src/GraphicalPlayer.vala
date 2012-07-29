@@ -39,9 +39,9 @@ public class GraphicalPlayer:Player
 	private Gtk.Grid grid;
 
 	/* Const parameters for the positions of differents elements */
-	private static const int[] WINDOW_SIZE = {100,600};
+	private static const int[] WINDOW_SIZE = {800,600};
 	private static const int[] HAND_POS = {50, 450};
-	private static const int[] DOG_POS = {250, 250};
+	private static const int[] DOG_POS = {100, 250};
 	private static const int[] BUTTON_POS = {300, 400};
 	/* Two followings should be const, but there seems to be a bug in the vala
 	   compiler for const multi-dimensionnal arrays... let's change that
