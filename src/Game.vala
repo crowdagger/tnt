@@ -95,7 +95,6 @@ public class Game:GLib.Object
 	{
 		for (int i = 0; i < 78; i++)
 		{
-			stdout.printf ("loading card %d\n", i);
 			Card c;
 			string line = stream.read_line ();
 			if (graphical)
@@ -613,15 +612,12 @@ public class Game:GLib.Object
 	 **/
 	public void load (GLib.FileStream stream)
 	{
-		stdout.printf ("trying to load...\n");
-
 		init_cards_from_stream (stream);
 
 		starter = int.parse (stream.read_line ());
 
 		for (int i = 0; i < nb_players; i++)
 		{
-			stdout.printf ("%d\n", i);
 			players[i] = Player.load (this, stream);
 		}
 		scores.load (stream);

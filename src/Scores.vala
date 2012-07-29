@@ -128,7 +128,6 @@ public class Scores:Gtk.TreeView
 		Gtk.TreeModel model = this.get_model ();
 		Gtk.TreeIter iter;
 		model.get_iter_first (out iter);
-		stdout.printf ("saving scores\n");
 		while (true)
 		{
 			GLib.Value value;
@@ -162,10 +161,8 @@ public class Scores:Gtk.TreeView
 	{
 		int[] scores = new int[nb_cols];
 		
-		stdout.printf ("loading scores\n");
 		while (true)
 		{
-			stdout.printf ("*\n");
 			for (int i = 0; i < nb_cols; i++)
 			{
 				int ret = stream.scanf ("%d ", out scores[i]);
