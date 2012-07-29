@@ -1,12 +1,9 @@
 Bugs:
-- excuse not properly handled: no card is given in exchange, plus it
-  is counted as trump and must be used when you no longer have trumps.
 - Petit au bout, poignée are not handled.
 
 TODO:
 - better IA
 - adds gettext support
 - better graphics
-- menus
-- saving scores
+- saving scores sheets
 - app file
