@@ -119,4 +119,68 @@ public class Scores:Gtk.TreeView
 			get_column (i).set_title (game.players[i].name);
 		}
 	}
+
+	/**
+	 * Save scores (except total) to a file
+	 **/
+	public void save (GLib.FileStream stream)
+	{
+		Gtk.TreeModel model = this.get_model ();
+		Gtk.TreeIter iter;
+		model.get_iter_first (out iter);
+		stdout.printf ("saving scores\n");
+		while (true)
+		{
+			GLib.Value value;
+			model.get_value (iter, nb_cols, out value);
+			if (value.get_string () == "1")
+			{
+				/* Stop when we get to the total scores */
+				break;
+			}
+			else
+			{
+				for (int i = 0; i < nb_cols; i++)
+				{
+					GLib.Value this_score;
+					model.get_value (iter, i, out this_score);
+					stream.printf ("%s ", this_score.get_string ());
+				}
+				stream.printf ("\n");
+			}
+			if (model.iter_next (ref iter) == false)
+			{
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Loads score (except total) from a stream
+	 **/
+	public void load (GLib.FileStream stream)
+	{
+		int[] scores = new int[nb_cols];
+		
+		stdout.printf ("loading scores\n");
+		while (true)
+		{
+			stdout.printf ("*\n");
+			for (int i = 0; i < nb_cols; i++)
+			{
+				int ret = stream.scanf ("%d ", out scores[i]);
+				if (ret == 0)
+				{
+					return;
+				}
+					
+			}
+			this.add_scores (scores);
+			stream.scanf ("\n");
+			if (stream.eof ())
+			{
+				break;
+			}
+		}
+	}
 }

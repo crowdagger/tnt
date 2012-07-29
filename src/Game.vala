@@ -603,8 +603,9 @@ public class Game:GLib.Object
 			{
 				p.save (stream);
 			}
+			scores.save (stream);
 		}
-		//scores.save (stream);
+
 	}
 
 	/**
@@ -623,6 +624,7 @@ public class Game:GLib.Object
 			stdout.printf ("%d\n", i);
 			players[i] = Player.load (this, stream);
 		}
+		scores.load (stream);
 		scores.refresh ();
 	}
 }
