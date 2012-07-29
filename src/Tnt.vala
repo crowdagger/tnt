@@ -31,6 +31,9 @@ public class Tnt:Gtk.Application
 
 	private string[] names;
 	private bool[] human = {true, false, false, false};
+	public string file_name;
+	private GLib.FileStream stream;
+
 	construct
 	{
 		names = new string[4];
@@ -38,8 +41,9 @@ public class Tnt:Gtk.Application
 		names[1] = "Player 2";
 		names[2] = "Player 3";
 		names[3] = "Player 4";
+		file_name = GLib.Environment.get_home_dir () + "/.tnt";
+		stream = GLib.FileStream.open (file_name, "r");
 
-		stdout.printf ("Creating new object\n");
 		this.set_application_id ("org.gtk.games.tnt");
 		this.set_flags (GLib.ApplicationFlags.FLAGS_NONE);
 		
@@ -82,11 +86,32 @@ public class Tnt:Gtk.Application
 		menu.append (game);
 		Gtk.Menu game_submenu = new Gtk.Menu ();
 		game.set_submenu (game_submenu);
+		Gtk.MenuItem resume_game = new Gtk.MenuItem.with_label ("Resume game");
+		if (stream == null)
+		{
+			resume_game.set_sensitive (false);
+		}
+		else
+		{
+			resume_game.activate.connect (() =>
+				{
+					Game tnt_game = new Game ();
+					tnt_game.file_to_save = file_name;
+					tnt_game.load (stream);
+					if (this.window != null)
+					{
+						this.window.hide ();
+					}
+					tnt_game.distribute ();
+				});
+		}
+		game_submenu.append (resume_game);
+				
 		Gtk.MenuItem new_game = new Gtk.MenuItem.with_label ("New game");
 		new_game.activate.connect (() =>
 			{
 				Game tnt_game = new Game ();
-//				tnt_game.load (stdin);
+				tnt_game.file_to_save = file_name;
 				tnt_game.init_players (names, human);
 				if (this.window != null)
 				{

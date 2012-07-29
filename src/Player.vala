@@ -82,7 +82,7 @@ public abstract class Player:GLib.Object
 	 **/
 	public static Player? load (Game game, GLib.FileStream stream)
 	{
-		string str_type = stdin.read_line ();
+		string str_type = stream.read_line ();
 		string name = stream.read_line ();
 		int score = int.parse (stream.read_line ());
 		Player player;

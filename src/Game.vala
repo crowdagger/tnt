@@ -32,6 +32,7 @@ public class Game:GLib.Object
 	public Hand defenders_stack {get; private set;}
 	public int taker {get; private set;}
 	public Scores scores {get; private set;}
+	public string file_to_save {get; set;}
 
 
 	private int current_turn;
@@ -49,9 +50,9 @@ public class Game:GLib.Object
 	 * Initialize all cards. If graphical is not set to true, the game
 	 * won't possibly run graphically.
 	 **/
-	private void init_cards (bool graphical)
+	private void init_cards (bool graphical = true)
 	{
-	/* Initialize all cards */
+		/* Initialize all cards */
 		/* Non-trumps */
 		Colour[] real_colours = {Colour.SPADE, Colour.HEART, Colour.DIAMOND, Colour.CLUB};
 		foreach (Colour colour in real_colours)
@@ -88,6 +89,28 @@ public class Game:GLib.Object
 	}
 
 	/**
+	 * Init the cards from an opened file 
+	 **/
+	public void init_cards_from_stream (GLib.FileStream stream, bool graphical = true)
+	{
+		for (int i = 0; i < 78; i++)
+		{
+			stdout.printf ("loading card %d\n", i);
+			Card c;
+			string line = stream.read_line ();
+			if (graphical)
+			{
+				c = new GraphicalCard.from_string (line);
+			}
+			else
+			{
+				c = new Card.from_string (line);
+			}
+			deck.add (c);
+		}
+	}
+
+	/**
 	 * (Re)init value to have a fresh game
 	 **/
 	private void init_values ()
@@ -106,6 +129,7 @@ public class Game:GLib.Object
 		starter = 0;
 		card_due_for_excuse = null;
 
+		file_to_save = null;
 		players_bids = new Bid[nb_players];
 		taker_stack = new Hand ();
 		defenders_stack = new Hand ();
@@ -114,7 +138,6 @@ public class Game:GLib.Object
 		deck = new Hand ();
 		
 		init_values ();
-		init_cards (graphical);
 		/* Initialize scores */
 		scores = new Scores (this);
 
@@ -126,6 +149,9 @@ public class Game:GLib.Object
 	 **/
 	public void init_players (string[]? _names, bool[]? _humans)
 	{
+		/* First, initialize cards */
+		init_cards (true);
+		deck.shuffle ();
 		string[] names;
 		bool[] humans;
 		if (_names == null)
@@ -170,7 +196,6 @@ public class Game:GLib.Object
 		assert (deck.list.size == 78);
 
 		init_values ();
-		deck.shuffle ();
 
 		dog = new Hand ();
 		Hand[] hands = new Hand[nb_players];
@@ -331,6 +356,7 @@ public class Game:GLib.Object
 		{
 			deck.take_all (players[i].hand);
 		}
+		this.save ();
 		init_values ();
 		distribute ();
 	}
@@ -514,7 +540,6 @@ public class Game:GLib.Object
 				dialog.set_title("Scores");
 				dialog.run();
 				dialog.destroy ();
-				this.save (stdout);
 				end_game ();
 			}
 		}
@@ -557,14 +582,29 @@ public class Game:GLib.Object
 	/**
 	 * Save the current state of the game to a file 
 	 **/
-	public void save (GLib.FileStream stream)
+	public void save ()
 	{
-		foreach (Player p in players)
+		/* Try to open a FileStream */
+		if (file_to_save == null)
 		{
-			p.save (stream);
+			return;
+		}
+		else
+		{
+			GLib.FileStream stream = GLib.FileStream.open (file_to_save, "w");
+		
+			assert (deck.list.size == 78);
+			foreach (Card c in deck.list)
+			{
+				stream.printf ("%s\n", c.to_string ());
+			}
+			stream.printf ("%d\n", starter);
+			foreach (Player p in players)
+			{
+				p.save (stream);
+			}
 		}
 		//scores.save (stream);
-		
 	}
 
 	/**
@@ -572,10 +612,16 @@ public class Game:GLib.Object
 	 **/
 	public void load (GLib.FileStream stream)
 	{
+		stdout.printf ("trying to load...\n");
+
+		init_cards_from_stream (stream);
+
+		starter = int.parse (stream.read_line ());
+
 		for (int i = 0; i < nb_players; i++)
 		{
+			stdout.printf ("%d\n", i);
 			players[i] = Player.load (this, stream);
-			/* Sets columns of the TreeView */
 		}
 		scores.refresh ();
 	}

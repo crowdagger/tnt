@@ -31,48 +31,9 @@ public class Card:GLib.Object
 	public double value {get; private set;} /* The value of a card, ie. the points it allows to earn */
 
 	/* Return the name of the card */
-	public string get_label ()
+	public string to_string ()
 	{
-		if (colour != Colour.TRUMP)
-		{
-			string str_rank;
-			switch (rank)
-			{
-			case 14:
-				str_rank = "roi";
-				break;
-			case 13:
-				str_rank = "dame";
-				break;
-			case 12:
-				str_rank = "cavalier";
-				break;
-			case 11:
-				str_rank = "valet";
-				break;
-			case 1:
-				str_rank = "as";
-				break;
-			default:
-				str_rank = rank.to_string ();
-				break;
-			}
-			return str_rank + " de " + colour.to_string();
-		}
-		else
-		{
-			switch (rank)
-			{
-			case 0:
-				return "excuse";
-			case 1:
-				return "petit";
-			case 21:
-				return "21";
-			default:
-				return rank.to_string () + " d'" + colour.to_string ();
-			}
-		}
+		return "%d, %d".printf (rank, colour);
 	}
 
 	/* Return true if the card is an oudler (excuse, petit or the 21),
@@ -118,9 +79,19 @@ public class Card:GLib.Object
 	
 	public Card (Colour colour, int rank)
 	{
-		this.rank = rank;
-		this.colour = colour;
-		
+		GLib.Object (colour: colour, rank: rank);
+	}
+
+	public Card.from_string (string str)
+	{
+		Colour _colour;
+		int _rank;
+		str.scanf ("%d, %d", out _rank, out _colour);
+		stdout.printf ("%d, %d\n", _colour, _rank);
+	    GLib.Object (colour: _colour, rank: _rank);
+	}
+
+	construct {
 		/* Set the value of the card */
 		if (colour != Colour.TRUMP)
 		{
