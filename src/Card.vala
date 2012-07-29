@@ -87,7 +87,6 @@ public class Card:GLib.Object
 		Colour _colour;
 		int _rank;
 		str.scanf ("%d, %d", out _rank, out _colour);
-		stdout.printf ("%d, %d\n", _colour, _rank);
 	    GLib.Object (colour: _colour, rank: _rank);
 	}
 
