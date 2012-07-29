@@ -29,10 +29,16 @@ public class Tnt:Gtk.Application
 {
 	private Gtk.ApplicationWindow window;
 
-	private string[] names = {"Player 1", "Player 2", "Player 3", "Player 4"};
+	private string[] names;
 	private bool[] human = {true, false, false, false};
-	public Tnt ()
+	construct
 	{
+		names = new string[4];
+		names[0] = GLib.Environment.get_real_name ();
+		names[1] = "Player 2";
+		names[2] = "Player 3";
+		names[3] = "Player 4";
+
 		stdout.printf ("Creating new object\n");
 		this.set_application_id ("org.gtk.games.tnt");
 		this.set_flags (GLib.ApplicationFlags.FLAGS_NONE);
@@ -93,14 +99,18 @@ public class Tnt:Gtk.Application
 		Gtk.MenuItem preferences = new Gtk.MenuItem.with_label ("Preferences");
 		preferences.activate.connect (() => {this.show_settings_dialog ();});
 		game_submenu.append (preferences);
-
+		
+		Gtk.MenuItem help = new Gtk.MenuItem.with_label ("Help");
+		menu.append (help);
+		Gtk.Menu help_submenu = new Gtk.Menu ();
+		help.set_submenu (help_submenu);
 		Gtk.MenuItem about = new Gtk.MenuItem.with_label ("About");
 		about.activate.connect (() => 
 			{
 				About dialog = new About ();
 				dialog.run ();
 			});
-		menu.append (about);
+		help_submenu.append (about);
 		
 		return menu;
 	}
