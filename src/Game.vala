@@ -33,6 +33,7 @@ public class Game:GLib.Object
 	public int taker {get; private set;}
 	public Scores scores {get; private set;}
 	public string file_to_save {get; set;}
+	public Gtk.TextBuffer buffer {get; private set;}
 
 
 	private int current_turn;
@@ -135,6 +136,7 @@ public class Game:GLib.Object
 		players = new Player[nb_players];
 		played_cards = new Card[nb_players];
 		deck = new Hand ();
+		buffer = new Gtk.TextBuffer (null);
 		
 		init_values ();
 		/* Initialize scores */
@@ -231,10 +233,12 @@ public class Game:GLib.Object
 		beginner = starter;
 
         /* Send demands for bids */
+		add_message ("*** Bids ***\n");
 		for (int i = 0; i < nb_players; i++)
 		{
 			players_bids[i] = Bid.NULL;
 		}
+		add_message ("%s: ".printf (players[current_player].name));
 		players[current_player].select_bid (Bid.PASSE);
 	}
 
@@ -270,6 +274,7 @@ public class Game:GLib.Object
 			max_bid = bid;
 			taker = current_player;
 		}
+		add_message ("%s\n".printf (bid.to_string ()));
 
 		current_player++;
 		if (current_player >= nb_players)
@@ -278,6 +283,7 @@ public class Game:GLib.Object
 		}
 		if (players_bids[current_player] == Bid.NULL)
 		{
+			add_message ("%s :".printf (players[current_player].name));
 			players[current_player].select_bid (max_bid);
 		}
 		else
@@ -576,6 +582,16 @@ public class Game:GLib.Object
 		}
 			
 		return true;
+	}
+
+	/**
+	 * Add a message to the text buffer
+	 **/
+	public void add_message (string message)
+	{
+		Gtk.TextIter iter;
+		buffer.get_end_iter (out iter);
+		buffer.insert (ref iter, message, -1);
 	}
 
 	/**

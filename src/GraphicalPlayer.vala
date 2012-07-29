@@ -36,10 +36,10 @@ public class GraphicalPlayer:Player
 	private GraphicalHand g_dog;
 	private Gtk.Label[] players_labels;
 	private Gtk.Image[] players_cards;
-	private Gtk.Box hbox;
+	private Gtk.Grid grid;
 
 	/* Const parameters for the positions of differents elements */
-	private static const int[] WINDOW_SIZE = {800,600};
+	private static const int[] WINDOW_SIZE = {100,600};
 	private static const int[] HAND_POS = {50, 450};
 	private static const int[] DOG_POS = {250, 250};
 	private static const int[] BUTTON_POS = {300, 400};
@@ -114,18 +114,32 @@ public class GraphicalPlayer:Player
 		window.window_position = Gtk.WindowPosition.CENTER;
 		window.destroy.connect (() => {tnt.quit ();});
 
-		/* Initialize the hbox */
-		hbox = new Gtk.HBox (false, 10);
-		window.add (hbox);
+		/* Initialize the grid */
+		grid = new Gtk.Grid ();
+		grid.set_row_homogeneous (true);
+		grid.set_row_spacing (10);
+		grid.set_column_homogeneous (false);
+		grid.set_column_spacing (10);
+		window.add (grid);
 	   
 		/* Initialize the fixed */
 		fixed = new Gtk.Fixed ();
-		hbox.add (fixed);
+		grid.attach (fixed, 0, 0, 1, 2);
 
+		/* ... the score sheet */
 		var win = new Gtk.ScrolledWindow (null, null);
 		win.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 		win.add (game.scores);
-		hbox.add (win);
+		grid.attach (win, 1, 0, 1, 1);
+
+		/* ... the messages text view */
+		Gtk.TextView view = new Gtk.TextView.with_buffer (game.buffer);
+		view.set_wrap_mode (Gtk.WrapMode.WORD_CHAR);
+		view.set_sensitive (false);
+		var win2 = new Gtk.ScrolledWindow (null, null);
+		win2.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+		win2.add (view);
+		grid.attach (win2, 1, 1, 1, 1);
 
 		/* Initialize the hand */
 		g_hand = new GraphicalHand (hand);

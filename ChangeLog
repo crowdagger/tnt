@@ -3,6 +3,7 @@
 Version 0.3 (????):
   - "Garde sans" and "Garde contre" are now handled.
   - A table of score is now displayed instead of just a string.
+  - Game messages are now displayed in a TextView, trying to avoid too much dialogues
   - Some basic GUI work.
   - Excuse is now handled correctly.
   - Possibility to resume game and gets the same scores.
