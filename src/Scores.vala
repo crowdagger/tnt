@@ -23,16 +23,17 @@
 /**
  * Callback for TreeViewColumn
  **/
-void data_func (Gtk.CellLayout layout, Gtk.CellRendererText renderer, Gtk.TreeModel model, Gtk.TreeIter iter)
+private void data_func (Gtk.CellLayout layout, Gtk.CellRendererText renderer, Gtk.TreeModel model, Gtk.TreeIter iter)
 {
 	GLib.Value value;
 	model.get_value (iter, 4, out value);
 	string content = value.get_string ();
 	int i = int.parse (content);
+	renderer.foreground = "#000000";
 	
 	if (i == 1)
 	{
-		renderer.cell_background = "#FF00FF";
+		renderer.cell_background = "#CC93CD";
 	}
 	else
 	{
@@ -49,6 +50,10 @@ public class Scores:Gtk.TreeView
 	private int nb_cols;
 	private Gtk.TreeIter total;
 	private Game game;
+	private Gtk.Window window;
+
+	/* Signal telling some data has been added */
+	public signal void new_data ();
 
 	public Scores (Game game)
 	{
@@ -92,6 +97,42 @@ public class Scores:Gtk.TreeView
 	}
 
 	/**
+	 * Show / hide scores 
+	 **/
+	public void toggle_view ()
+	{
+		if (window != null)
+		{
+			if (window.visible)
+			{
+				window.hide ();
+			}
+			else
+			{
+				window.show_all ();
+			}
+		}
+		else
+		{
+			window = new Gtk.Window ();
+			window.set_title ("Scores");
+			window.set_default_size (500, 500);
+			window.set_deletable (false);
+			var win = new Gtk.ScrolledWindow (null, null);
+			win.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+			win.add (this);
+			window.add (win);
+			window.destroy.connect (() =>
+				{
+					this.unparent ();
+					this.window = null;
+				});
+
+			window.show_all ();
+		}
+	}
+
+	/**
 	 * Add the score from a game 
 	 **/
 	public void add_scores (int[] scores)
@@ -106,6 +147,7 @@ public class Scores:Gtk.TreeView
 		}
 		store.set (iter, nb_cols, "0");
 		store.set (total, nb_cols, "1");
+		new_data ();
 	}
 
 	/**

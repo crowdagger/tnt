@@ -46,6 +46,9 @@ public class Game:GLib.Object
 	private Hand dog;
 	private int nb_approvals;
 	private Hand card_due_for_excuse;
+	
+	/* Signal emitted when there is a new message */
+	public signal void new_message ();
 
 	/**
 	 * Initialize all cards. If graphical is not set to true, the game
@@ -233,6 +236,13 @@ public class Game:GLib.Object
 		beginner = starter;
 
         /* Send demands for bids */
+		add_message ("*** New game ***\n");
+		int distributer = starter -1;
+		if (distributer < 0)
+		{
+			distributer += nb_players;
+		}
+		add_message ("%s distributes, %s starts\n".printf (players[distributer].name, players[starter].name));
 		add_message ("*** Bids ***\n");
 		for (int i = 0; i < nb_players; i++)
 		{
@@ -283,7 +293,7 @@ public class Game:GLib.Object
 		}
 		if (players_bids[current_player] == Bid.NULL)
 		{
-			add_message ("%s :".printf (players[current_player].name));
+			add_message ("%s: ".printf (players[current_player].name));
 			players[current_player].select_bid (max_bid);
 		}
 		else
@@ -592,6 +602,7 @@ public class Game:GLib.Object
 		Gtk.TextIter iter;
 		buffer.get_end_iter (out iter);
 		buffer.insert (ref iter, message, -1);
+		new_message ();
 	}
 
 	/**

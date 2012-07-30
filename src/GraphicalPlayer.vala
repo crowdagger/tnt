@@ -37,6 +37,7 @@ public class GraphicalPlayer:Player
 	private Gtk.Label[] players_labels;
 	private Gtk.Image[] players_cards;
 	private Gtk.Grid grid;
+	private SynthethicScore synthetic_score;
 
 	/* Const parameters for the positions of differents elements */
 	private static const int[] WINDOW_SIZE = {800,600};
@@ -116,30 +117,48 @@ public class GraphicalPlayer:Player
 
 		/* Initialize the grid */
 		grid = new Gtk.Grid ();
-		grid.set_row_homogeneous (true);
+		grid.set_row_homogeneous (false);
 		grid.set_row_spacing (10);
 		grid.set_column_homogeneous (false);
 		grid.set_column_spacing (10);
 		window.add (grid);
 	   
+		/* Initialize the menu */
+		Gtk.MenuBar menu = this.get_menu ();
+		grid.attach (menu, 0, 0, 2, 1);
+		
 		/* Initialize the fixed */
 		fixed = new Gtk.Fixed ();
-		grid.attach (fixed, 0, 0, 1, 2);
+		grid.attach (fixed, 0, 1, 1, 3);
 
 		/* ... the score sheet */
+		synthetic_score = new SynthethicScore (game);
+		
 		var win = new Gtk.ScrolledWindow (null, null);
 		win.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-		win.add (game.scores);
-		grid.attach (win, 1, 0, 1, 1);
+		win.add (synthetic_score);
+		var frame = new Gtk.Frame ("Scores");
+		frame.add (win);
+		frame.set_shadow_type (Gtk.ShadowType.ETCHED_IN);
+		grid.attach (frame, 1, 1, 1, 1);
 
 		/* ... the messages text view */
 		Gtk.TextView view = new Gtk.TextView.with_buffer (game.buffer);
 		view.set_wrap_mode (Gtk.WrapMode.WORD_CHAR);
-		view.set_sensitive (false);
+		view.set_editable (false);
 		var win2 = new Gtk.ScrolledWindow (null, null);
+		game.new_message.connect (() =>
+			{
+				Gtk.Adjustment adjustment = win2.get_vadjustment ();
+				adjustment.set_value (adjustment.get_upper () - adjustment.get_page_size ());
+				adjustment.value_changed ();
+			});
 		win2.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 		win2.add (view);
-		grid.attach (win2, 1, 1, 1, 1);
+		var frame2 = new Gtk.Frame ("Messages");
+		frame2.set_shadow_type (Gtk.ShadowType.ETCHED_IN);
+		frame2.add (win2);
+		grid.attach (frame2, 1, 2, 2, 2);
 
 		/* Initialize the hand */
 		g_hand = new GraphicalHand (hand);
@@ -154,6 +173,39 @@ public class GraphicalPlayer:Player
 		}
 
 		window.show_all ();
+	}
+
+	/**
+	 * Create a menu 
+	 **/
+	public Gtk.MenuBar get_menu ()
+	{
+		Gtk.MenuBar menu = new Gtk.MenuBar ();
+		
+		Gtk.MenuItem view = new Gtk.MenuItem.with_label ("View");
+		menu.append (view);
+		Gtk.Menu view_submenu = new Gtk.Menu ();
+		view.set_submenu (view_submenu);
+		Gtk.MenuItem scores = new Gtk.MenuItem.with_label ("Full score sheet");
+		scores.activate.connect (() =>
+			{
+				game.scores.toggle_view ();
+			});
+		view_submenu.append (scores);
+
+		Gtk.MenuItem help = new Gtk.MenuItem.with_label ("Help");
+		menu.append (help);
+		Gtk.Menu help_submenu = new Gtk.Menu ();
+		help.set_submenu (help_submenu);
+		Gtk.MenuItem about = new Gtk.MenuItem.with_label ("About");
+		about.activate.connect (() => 
+			{
+				About dialog = new About ();
+				dialog.run ();
+			});
+		help_submenu.append (about);
+
+		return menu;
 	}
 
 	/**
@@ -217,6 +269,8 @@ public class GraphicalPlayer:Player
 
 	public override void receive_hand (Hand hand)
 	{
+		synthetic_score.refresh ();
+
 		this.hand = hand;
 		this.hand.sort ();
 		g_hand.refresh (hand);
