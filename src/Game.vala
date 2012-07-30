@@ -304,10 +304,7 @@ public class Game:GLib.Object
 				current_turn = 0;
 
 				string message = "%s takes %s\n".printf (players[taker].name, max_bid.to_string ());
-				var dialog = new Gtk.MessageDialog (null,Gtk.DialogFlags.MODAL,Gtk.MessageType.INFO, Gtk.ButtonsType.OK, message); 
-				dialog.set_title("Game info");
-				dialog.run();
-				dialog.destroy ();
+				add_message (message);
 
 				if (max_bid < Bid.GARDE_SANS)
 				{
@@ -551,10 +548,8 @@ public class Game:GLib.Object
 				}
 				scores.add_scores (turn_scores);
 
-				var dialog = new Gtk.MessageDialog (null,Gtk.DialogFlags.MODAL,Gtk.MessageType.INFO, Gtk.ButtonsType.OK, message); 
-				dialog.set_title("Scores");
-				dialog.run();
-				dialog.destroy ();
+				this.clear_messages ();
+				this.add_message (message);
 				end_game ();
 			}
 		}
@@ -603,6 +598,14 @@ public class Game:GLib.Object
 		buffer.get_end_iter (out iter);
 		buffer.insert (ref iter, message, -1);
 		new_message ();
+	}
+
+	/**
+	 * Clear the message buffer
+	 **/
+	public void clear_messages ()
+	{
+		buffer.set_text ("", -1);
 	}
 
 	/**
