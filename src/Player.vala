@@ -45,6 +45,7 @@ public abstract class Player:GLib.Object
 	{
 		game.approve_new_turn (this);
 	}
+	
 
 	/* Must decide what bid the player wants to do, and inform back
 	 * game.give_bid */
@@ -52,6 +53,9 @@ public abstract class Player:GLib.Object
 	
 	/* Must decide of a dog, and call back game.give_dog */
 	public abstract void receive_dog (Hand dog);
+
+	/* Acknowledge that we want to start a new game */
+	public abstract void request_new_game ();
 
 	/* This method must call back game.give_card at some point */
 	public abstract void select_card (int beginner, Card[] cards);

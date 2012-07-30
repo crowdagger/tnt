@@ -39,6 +39,15 @@ public class IAPlayer:Player
 	}
 
 	/**
+	 * Wait before starting a new game. But before IA doesn't
+	 * need a break, don't wait, actually.
+	 **/
+	public override void request_new_game ()
+	{
+		game.ack_new_game ();
+	}
+
+	/**
 	 * Select a bid
 	 *
 	 * The idea is to evaluate a hand, and according to the player, take or not.

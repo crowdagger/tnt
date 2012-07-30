@@ -14,7 +14,8 @@ tnt_SOURCES = \
 	Player.vala \
 	Scores.vala \
 	Tnt.vala \
-	About.vala
+	About.vala \
+	SynthethicScore.vala
 
 INCLUDES = \
 	-include config.h \

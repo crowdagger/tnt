@@ -364,6 +364,22 @@ public class GraphicalPlayer:Player
 	}
 
 	/**
+	 * Ask the player when she is ready to start a new game
+	 **/
+	public override void request_new_game ()
+	{
+		button = new Gtk.Button.with_label ("New game");
+		fixed.put (button, BUTTON_POS[0], BUTTON_POS[1]);
+		button.clicked.connect (() =>
+			{
+				button.destroy ();
+				button = null;
+				game.ack_new_game ();
+			});
+		button.show ();
+	}
+
+	/**
 	 * Show the dog
 	 **/
 	public override void receive_dog (Hand dog)

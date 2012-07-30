@@ -236,6 +236,7 @@ public class Game:GLib.Object
 		beginner = starter;
 
         /* Send demands for bids */
+		clear_messages ();
 		add_message ("*** New game ***\n");
 		int distributer = starter -1;
 		if (distributer < 0)
@@ -370,8 +371,27 @@ public class Game:GLib.Object
 		}
 		this.save ();
 		init_values ();
-		distribute ();
+		this.nb_approvals = 0;
+		
+		foreach (Player p in players)
+		{
+			p.request_new_game ();
+		}
 	}
+
+	/**
+	 * Acknowledge that all players want to start a new game
+	 **/
+	public void ack_new_game ()
+	{
+		nb_approvals++;
+		if (nb_approvals == nb_players)
+		{
+			nb_approvals = 0;
+			distribute ();
+		}
+	}
+	
 
 	/**
 	 * Get a card that a player wants to play. Return true if it's
