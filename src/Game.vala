@@ -528,7 +528,7 @@ public class Game:GLib.Object
 				}
 
 				double score = taker_stack.get_score ();
-				string message = "%d points with %d oudlers\n".printf ((int) taker_stack.get_value (), taker_stack.get_nb_oudlers ());
+				string message = "*** Scores ***\n%d points with %d oudlers\n".printf ((int) taker_stack.get_value (), taker_stack.get_nb_oudlers ());
 				message += "Required score: %d\n".printf (taker_stack.required_score ());
 				message += "Difference: %d\n".printf ((int) (taker_stack.get_value () - taker_stack.required_score ()));
 					
@@ -564,7 +564,7 @@ public class Game:GLib.Object
 						turn_scores[i] = (int) (0-score);
 						players[i].score -= (int) score;
 					}
-					message += "%s \t %d\n".printf (players[i].name, (int)players[i].score);
+					message += "%s \t %d\n".printf (players[i].name, turn_scores[i]);
 				}
 				scores.add_scores (turn_scores);
 

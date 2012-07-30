@@ -129,7 +129,7 @@ public class GraphicalPlayer:Player
 		
 		/* Initialize the fixed */
 		fixed = new Gtk.Fixed ();
-		grid.attach (fixed, 0, 1, 1, 3);
+		grid.attach (fixed, 0, 1, 1, 4);
 
 		/* ... the score sheet */
 		synthetic_score = new SynthethicScore (game);
@@ -158,7 +158,7 @@ public class GraphicalPlayer:Player
 		var frame2 = new Gtk.Frame ("Messages");
 		frame2.set_shadow_type (Gtk.ShadowType.ETCHED_IN);
 		frame2.add (win2);
-		grid.attach (frame2, 1, 2, 2, 2);
+		grid.attach (frame2, 1, 2, 1, 3);
 
 		/* Initialize the hand */
 		g_hand = new GraphicalHand (hand);
