@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=0.3
+_Name=TnT
+_GenericName=Tiny 'Nux Tarot
+_Comment=Tiny french tarot game
+Exec=tnt
+Icon=application-default-icon
+Terminal=false
+Categories=Games
+StartupNotify=true
