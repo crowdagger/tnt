@@ -76,6 +76,122 @@ public class Tnt:Gtk.Application
 	}
 
 	/**
+	 * Override the 'startup' signal of GLib.Application.
+	 **/
+	protected override void startup () {
+		base.startup ();
+
+		set_app_menu_out_game ();
+	}
+
+	/**
+	 * Sets the basics (about, quit) for application menu
+	 **/
+	private Menu set_base_app_menu ()
+	{
+		var menu = new Menu ();
+		menu.append ("About", "app.about");
+		menu.append ("Quit", "app.quit");
+		this.app_menu = menu;
+
+		var about_action = new SimpleAction ("about", null);
+		about_action.activate.connect (() => 
+			{
+				About dialog = new About ();
+				dialog.run ();
+			});
+		this.add_action (about_action);
+		var quit_action = new SimpleAction ("quit", null);
+		quit_action.activate.connect (() => {this.quit ();});
+		this.add_action (quit_action);
+
+		return menu;
+	}
+
+	/**
+	 * Set app menu when a game is running 
+	 **/
+	private void set_app_menu_in_game ()
+	{
+		var menu = this.get_app_menu () as Menu;
+		menu.remove (0);
+		menu.remove (0);
+		if (stream != null)
+		{
+			menu.remove (0);
+		}
+	}
+	
+	/**
+	 * Set app menu when no game is runned 
+	 **/
+	private void set_app_menu_out_game ()
+	{
+		var menu = set_base_app_menu ();
+
+		menu.prepend ("Settings", "app.settings");
+		var settings = new SimpleAction ("settings", null);
+		settings.activate.connect (() =>
+			{
+				this.show_settings_dialog ();
+			});
+		this.add_action (settings);
+
+		menu.prepend ("New game", "app.new_game");
+		
+		var new_game = new SimpleAction ("new_game", null);
+		new_game.activate.connect (() =>
+		{
+			this.new_game ();
+		});
+		this.add_action (new_game);
+
+		if (stream != null)
+		{
+			menu.prepend ("Resume game", "app.resume_game");
+			var resume_game = new SimpleAction ("resume_game", null);
+			resume_game.activate.connect (() =>
+				{
+					this.resume_game (stream);
+				});
+			this.add_action (resume_game);
+		}
+	}
+
+	/**
+	 * Launch a new game 
+	 **/
+	private void new_game ()
+	{
+		Game tnt_game = new Game ();
+		tnt_game.file_to_save = file_name;
+		tnt_game.init_players (names, human);
+		if (this.window != null)
+		{
+			this.window.hide ();
+			set_app_menu_in_game ();
+		}
+		tnt_game.distribute ();
+	}
+
+	/**
+	 * Resumes a game 
+	 **/
+	private void resume_game (FileStream stream)
+	{
+		Game tnt_game = new Game ();
+		tnt_game.file_to_save = file_name;
+		tnt_game.load (stream);
+		if (this.window != null)
+		{
+			this.window.hide ();
+			set_app_menu_in_game ();
+		}
+		tnt_game.distribute ();
+	}
+		
+
+	/**
 	 * Get the application-wide menu
 	 **/
 	public Gtk.MenuBar get_tnt_menu ()
@@ -95,14 +211,7 @@ public class Tnt:Gtk.Application
 		{
 			resume_game.activate.connect (() =>
 				{
-					Game tnt_game = new Game ();
-					tnt_game.file_to_save = file_name;
-					tnt_game.load (stream);
-					if (this.window != null)
-					{
-						this.window.hide ();
-					}
-					tnt_game.distribute ();
+					this.resume_game (stream);
 				});
 		}
 		game_submenu.append (resume_game);
@@ -110,18 +219,10 @@ public class Tnt:Gtk.Application
 		Gtk.MenuItem new_game = new Gtk.MenuItem.with_label ("New game");
 		new_game.activate.connect (() =>
 			{
-				Game tnt_game = new Game ();
-				tnt_game.file_to_save = file_name;
-				tnt_game.init_players (names, human);
-				if (this.window != null)
-				{
-					this.window.hide ();
-				}
-				tnt_game.distribute ();
-
+				this.new_game ();
 			});
 		game_submenu.append (new_game);
-		Gtk.MenuItem preferences = new Gtk.MenuItem.with_label ("Preferences");
+		Gtk.MenuItem preferences = new Gtk.MenuItem.with_label ("Settings");
 		preferences.activate.connect (() => {this.show_settings_dialog ();});
 		game_submenu.append (preferences);
 		
