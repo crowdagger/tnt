@@ -143,6 +143,8 @@ public class GraphicalPlayer:Player
 	   
 		/* Initialize the fixed */
 		fixed = new Gtk.Fixed ();
+		fixed.vexpand = true;
+		fixed.hexpand = true;
 		grid.attach (fixed, 0, 1, 1, 4);
 
 		/* ... the score sheet */

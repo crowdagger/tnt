@@ -198,6 +198,14 @@ public class Tnt:Gtk.Application
 					this.game.init_players (names, human);
 					this.game.distribute ();
 				}
+				else 
+				{
+					/* If cancel, do nothing most of the time, but if no game is running, quit the app */
+					if (this.game == null)
+					{
+						this.quit ();
+					}
+				}
 				dialog.destroy ();
 				
 			}); 
