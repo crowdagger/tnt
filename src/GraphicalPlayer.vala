@@ -129,6 +129,7 @@ public class GraphicalPlayer:Player
 		window = new Gtk.ApplicationWindow (tnt);
 		window.set_application (tnt);
 		window.title = name;
+		window.set_hide_titlebar_when_maximized (true);
 		window.set_default_size (WINDOW_SIZE[0], WINDOW_SIZE[1]);
 		window.window_position = Gtk.WindowPosition.CENTER;
 		window.delete_event.connect (() => {tnt.quit ();});
