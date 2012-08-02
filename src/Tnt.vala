@@ -127,11 +127,7 @@ public class Tnt:Gtk.Application
 		var end_game_action = new SimpleAction ("end_game", null);
 		end_game_action.activate.connect (() =>
 			{
-				stdout.printf ("%d\n", (int) game.ref_count);
-				this.game = null;
-				this.set_app_menu_out_game ();
-				this.stream = GLib.FileStream.open (file_name, "r");
-				this.window.show_all ();
+				this.end_game ();
 			});
 		this.add_action (end_game_action);
 		menu.prepend ("Score sheet", "app.scores");
@@ -143,6 +139,18 @@ public class Tnt:Gtk.Application
 		this.add_action (view_score);
 	}
 	
+	/**
+	 * End a game, but don't quit the game
+	 **/
+	public void end_game ()
+	{
+		stdout.printf ("%d\n", (int) game.ref_count);
+		this.game = null;
+		this.set_app_menu_out_game ();
+		this.stream = GLib.FileStream.open (file_name, "r");
+		this.window.show_all ();
+	}
+
 	/**
 	 * Set app menu when no game is runned 
 	 **/
