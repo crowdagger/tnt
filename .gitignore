@@ -20,3 +20,7 @@ config.status
 src/.deps
 tnt
 aclocal.m4
+intltool-*.in
+po/Makefile.in.in
+po/POTFILES
+po/stamp-it
