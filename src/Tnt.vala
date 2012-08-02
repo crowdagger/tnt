@@ -38,9 +38,9 @@ public class Tnt:Gtk.Application
 	{
 		names = new string[4];
 		names[0] = GLib.Environment.get_real_name ();
-		names[1] = "Player 2";
-		names[2] = "Player 3";
-		names[3] = "Player 4";
+		names[1] = _("Player 2");
+		names[2] = _("Player 3");
+		names[3] = _("Player 4");
 		file_name = GLib.Environment.get_home_dir () + "/.tnt";
 		stream = GLib.FileStream.open (file_name, "r");
 
@@ -53,7 +53,7 @@ public class Tnt:Gtk.Application
 		}
 		catch (GLib.Error e)
 		{
-			stdout.printf ("Ooops: could not register application\n");
+			stdout.printf (_("Ooops: could not register application\n"));
 			return;
 		}
 	}
@@ -82,7 +82,7 @@ public class Tnt:Gtk.Application
 
 		var menu = new Menu ();
 
-		menu.append ("New game", "app.new_game");
+		menu.append (_("New game"), "app.new_game");
 		var new_game = new SimpleAction ("new_game", null);
 		new_game.activate.connect (() =>
 		{
@@ -90,7 +90,7 @@ public class Tnt:Gtk.Application
 		});
 		this.add_action (new_game);
 
-		menu.append ("Score sheet", "app.scores");
+		menu.append (_("Score sheet"), "app.scores");
 		var view_score = new SimpleAction ("scores", null);
 		view_score.activate.connect (() =>
 			{
@@ -102,8 +102,8 @@ public class Tnt:Gtk.Application
 		this.add_action (view_score);
 
 
-		menu.append ("About", "app.about");
-		menu.append ("Quit", "app.quit");
+		menu.append (_("About"), "app.about");
+		menu.append (_("Quit"), "app.quit");
 		this.app_menu = menu;
 
 		var about_action = new SimpleAction ("about", null);
@@ -156,24 +156,24 @@ public class Tnt:Gtk.Application
 		
 	public void new_game ()
 	{
-		Gtk.Dialog dialog = new Gtk.Dialog.with_buttons ("New game", null, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.Stock.OK, Gtk.ResponseType.ACCEPT, Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL, null);
+		Gtk.Dialog dialog = new Gtk.Dialog.with_buttons (_("New game"), null, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.Stock.OK, Gtk.ResponseType.ACCEPT, Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL, null);
 		dialog.set_application (this);
 
 
 		Gtk.Box box = dialog.get_content_area () as Gtk.Box;
-		Gtk.Label label = new Gtk.Label ("Players settings");
+		Gtk.Label label = new Gtk.Label (_("Players settings"));
 		box.add (label);
 		Gtk.Entry[] entries = new Gtk.Entry[4];
 		Gtk.ToggleButton[] buttons = new Gtk.ToggleButton[4];
 		for (int i = 0; i < 4 ; i++)
 		{
 			Gtk.HBox hbox = new Gtk.HBox (true, 10);
-			Gtk.Label name_label = new Gtk.Label ("Name: ");
+			Gtk.Label name_label = new Gtk.Label (_("Name: "));
 			hbox.add (name_label);
 			entries[i] = new Gtk.Entry ();
 			entries[i].set_text (names[i]);
 			hbox.add (entries[i]);
-			buttons[i] = new Gtk.ToggleButton.with_label ("Human");
+			buttons[i] = new Gtk.ToggleButton.with_label (_("Human"));
 			buttons[i].set_active (human[i]);
 			hbox.add (buttons[i]);
 			box.add (hbox);
