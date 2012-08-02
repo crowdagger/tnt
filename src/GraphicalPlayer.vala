@@ -30,7 +30,7 @@ public class GraphicalPlayer:Player
 	private ulong old_callback;	
 
 	/* Widgets for differents elements */
-	public Gtk.Window window;
+	public Gtk.ApplicationWindow window;
 	private Gtk.Fixed fixed;
 	private Gtk.Button button;
 	private GraphicalHand g_dog;
@@ -126,11 +126,12 @@ public class GraphicalPlayer:Player
 		g_dog = null;
 		
 		/* Initialize the window */
-		window = new Gtk.Window ();
+		window = new Gtk.ApplicationWindow (tnt);
+		window.set_application (tnt);
 		window.title = name;
 		window.set_default_size (WINDOW_SIZE[0], WINDOW_SIZE[1]);
 		window.window_position = Gtk.WindowPosition.CENTER;
-		window.delete_event.connect (() => {tnt.end_game ();});
+		window.delete_event.connect (() => {tnt.quit ();});
 
 		/* Initialize the grid */
 		grid = new Gtk.Grid ();
@@ -140,10 +141,6 @@ public class GraphicalPlayer:Player
 		grid.set_column_spacing (10);
 		window.add (grid);
 	   
-		/* Initialize the menu */
-		Gtk.MenuBar menu = this.get_menu ();
-		grid.attach (menu, 0, 0, 2, 1);
-		
 		/* Initialize the fixed */
 		fixed = new Gtk.Fixed ();
 		grid.attach (fixed, 0, 1, 1, 4);
@@ -190,39 +187,6 @@ public class GraphicalPlayer:Player
 		}
 
 		window.show_all ();
-	}
-
-	/**
-	 * Create a menu 
-	 **/
-	public Gtk.MenuBar get_menu ()
-	{
-		Gtk.MenuBar menu = new Gtk.MenuBar ();
-		
-		Gtk.MenuItem view = new Gtk.MenuItem.with_label ("View");
-		menu.append (view);
-		Gtk.Menu view_submenu = new Gtk.Menu ();
-		view.set_submenu (view_submenu);
-		Gtk.MenuItem scores = new Gtk.MenuItem.with_label ("Full score sheet");
-		scores.activate.connect (() =>
-			{
-				game.scores.toggle_view ();
-			});
-		view_submenu.append (scores);
-
-		Gtk.MenuItem help = new Gtk.MenuItem.with_label ("Help");
-		menu.append (help);
-		Gtk.Menu help_submenu = new Gtk.Menu ();
-		help.set_submenu (help_submenu);
-		Gtk.MenuItem about = new Gtk.MenuItem.with_label ("About");
-		about.activate.connect (() => 
-			{
-				About dialog = new About ();
-				dialog.run ();
-			});
-		help_submenu.append (about);
-
-		return menu;
 	}
 
 	/**

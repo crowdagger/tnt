@@ -27,7 +27,6 @@ public static extern void exit (int status);
  **/
 public class Tnt:Gtk.Application
 {
-	private Gtk.ApplicationWindow window;
 
 	private string[] names;
 	private bool[] human = {true, false, false, false};
@@ -57,22 +56,21 @@ public class Tnt:Gtk.Application
 			stdout.printf ("Ooops: could not register application\n");
 			return;
 		}
-		window = null;
 	}
 
 	/**
 	 * Method called when program is activated (e.g, runned)
+	 * If there is a game to resume to, do it, else launch new game with default settings
 	 **/
 	public override void activate ()
 	{
-		if (window == null)
+		if (this.stream != null)
 		{
-			Gtk.MenuBar menu = get_tnt_menu ();
-			window = new Gtk.ApplicationWindow (this);
-			window.set_application (this);
-			window.add (menu);
-			window.destroy.connect (() => {this.quit ();});
-			window.show_all ();
+			this.resume_game (stream);
+		}
+		else
+		{
+			this.new_game ();
 		}
 	}
 
@@ -82,15 +80,28 @@ public class Tnt:Gtk.Application
 	protected override void startup () {
 		base.startup ();
 
-		set_app_menu_out_game ();
-	}
-
-	/**
-	 * Sets the basics (about, quit) for application menu
-	 **/
-	private Menu set_base_app_menu ()
-	{
 		var menu = new Menu ();
+
+		menu.append ("New game", "app.new_game");
+		var new_game = new SimpleAction ("new_game", null);
+		new_game.activate.connect (() =>
+		{
+			this.new_game ();
+		});
+		this.add_action (new_game);
+
+		menu.append ("Score sheet", "app.scores");
+		var view_score = new SimpleAction ("scores", null);
+		view_score.activate.connect (() =>
+			{
+				if (this.game != null)
+				{
+					this.game.scores.toggle_view ();
+				}
+			});
+		this.add_action (view_score);
+
+
 		menu.append ("About", "app.about");
 		menu.append ("Quit", "app.quit");
 		this.app_menu = menu;
@@ -105,39 +116,8 @@ public class Tnt:Gtk.Application
 		var quit_action = new SimpleAction ("quit", null);
 		quit_action.activate.connect (() => {this.quit ();});
 		this.add_action (quit_action);
-
-		return menu;
 	}
 
-	/**
-	 * Set app menu when a game is running 
-	 **/
-	private void set_app_menu_in_game ()
-	{
-		var menu = this.get_app_menu () as Menu;
-		menu.remove (0);
-		menu.remove (0);
-		if (stream != null)
-		{
-			menu.remove (0);
-		}
-
-
-		menu.prepend ("End game", "app.end_game");
-		var end_game_action = new SimpleAction ("end_game", null);
-		end_game_action.activate.connect (() =>
-			{
-				this.end_game ();
-			});
-		this.add_action (end_game_action);
-		menu.prepend ("Score sheet", "app.scores");
-		var view_score = new SimpleAction ("scores", null);
-		view_score.activate.connect (() =>
-			{
-				this.game.scores.toggle_view ();
-			});
-		this.add_action (view_score);
-	}
 	
 	/**
 	 * End a game, but don't quit the game
@@ -146,61 +126,7 @@ public class Tnt:Gtk.Application
 	{
 		stdout.printf ("%d\n", (int) game.ref_count);
 		this.game = null;
-		this.set_app_menu_out_game ();
 		this.stream = GLib.FileStream.open (file_name, "r");
-		this.window.show_all ();
-	}
-
-	/**
-	 * Set app menu when no game is runned 
-	 **/
-	private void set_app_menu_out_game ()
-	{
-		var menu = set_base_app_menu ();
-
-		menu.prepend ("Settings", "app.settings");
-		var settings = new SimpleAction ("settings", null);
-		settings.activate.connect (() =>
-			{
-				this.show_settings_dialog ();
-			});
-		this.add_action (settings);
-
-		menu.prepend ("New game", "app.new_game");
-		
-		var new_game = new SimpleAction ("new_game", null);
-		new_game.activate.connect (() =>
-		{
-			this.new_game ();
-		});
-		this.add_action (new_game);
-
-		if (stream != null)
-		{
-			menu.prepend ("Resume game", "app.resume_game");
-			var resume_game = new SimpleAction ("resume_game", null);
-			resume_game.activate.connect (() =>
-				{
-					this.resume_game (stream);
-				});
-			this.add_action (resume_game);
-		}
-	}
-
-	/**
-	 * Launch a new game 
-	 **/
-	private void new_game ()
-	{
-		this.game = new Game ();
-		this.game.file_to_save = file_name;
-		this.game.init_players (names, human);
-		if (this.window != null)
-		{
-			this.window.hide ();
-			set_app_menu_in_game ();
-		}
-		this.game.distribute ();
 	}
 
 	/**
@@ -211,64 +137,9 @@ public class Tnt:Gtk.Application
 		this.game = new Game ();
 		this.game.file_to_save = file_name;
 		this.game.load (stream);
-		if (this.window != null)
-		{
-			this.window.hide ();
-			set_app_menu_in_game ();
-		}
 		this.game.distribute ();
 	}
 		
-
-	/**
-	 * Get the application-wide menu
-	 **/
-	public Gtk.MenuBar get_tnt_menu ()
-	{
-		Gtk.MenuBar menu = new Gtk.MenuBar ();
-
-		Gtk.MenuItem game = new Gtk.MenuItem.with_label ("Game");
-		menu.append (game);
-		Gtk.Menu game_submenu = new Gtk.Menu ();
-		game.set_submenu (game_submenu);
-		Gtk.MenuItem resume_game = new Gtk.MenuItem.with_label ("Resume game");
-		if (stream == null)
-		{
-			resume_game.set_sensitive (false);
-		}
-		else
-		{
-			resume_game.activate.connect (() =>
-				{
-					this.resume_game (stream);
-				});
-		}
-		game_submenu.append (resume_game);
-				
-		Gtk.MenuItem new_game = new Gtk.MenuItem.with_label ("New game");
-		new_game.activate.connect (() =>
-			{
-				this.new_game ();
-			});
-		game_submenu.append (new_game);
-		Gtk.MenuItem preferences = new Gtk.MenuItem.with_label ("Settings");
-		preferences.activate.connect (() => {this.show_settings_dialog ();});
-		game_submenu.append (preferences);
-		
-		Gtk.MenuItem help = new Gtk.MenuItem.with_label ("Help");
-		menu.append (help);
-		Gtk.Menu help_submenu = new Gtk.Menu ();
-		help.set_submenu (help_submenu);
-		Gtk.MenuItem about = new Gtk.MenuItem.with_label ("About");
-		about.activate.connect (() => 
-			{
-				About dialog = new About ();
-				dialog.run ();
-			});
-		help_submenu.append (about);
-		
-		return menu;
-	}
 
 	/**
 	 * Just quit the program 
@@ -282,10 +153,10 @@ public class Tnt:Gtk.Application
 	{
 		exit (0);
 	}
-
-	public void show_settings_dialog ()
+		
+	public void new_game ()
 	{
-		Gtk.Dialog dialog = new Gtk.Dialog.with_buttons ("Settings", null, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.Stock.OK, Gtk.ResponseType.ACCEPT, Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL, null);
+		Gtk.Dialog dialog = new Gtk.Dialog.with_buttons ("New game", null, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.Stock.OK, Gtk.ResponseType.ACCEPT, Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL, null);
 		dialog.set_application (this);
 
 
@@ -316,8 +187,19 @@ public class Tnt:Gtk.Application
 						names[i] = entries[i].get_text ();
 						human[i] = buttons[i].get_active ();
 					}
+
+					if (this.game != null)
+					{
+						this.end_game ();
+					}
+					
+					this.game = new Game ();
+					this.game.file_to_save = file_name;
+					this.game.init_players (names, human);
+					this.game.distribute ();
 				}
 				dialog.destroy ();
+				
 			}); 
 
 		box.show_all ();
