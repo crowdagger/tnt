@@ -49,7 +49,7 @@ public class Scores:Gtk.TreeView
 	private Gtk.ListStore store;
 	private int nb_cols;
 	private Gtk.TreeIter total;
-	private Game game;
+	private weak Game game;
 	private Gtk.Window window;
 
 	/* Signal telling some data has been added */

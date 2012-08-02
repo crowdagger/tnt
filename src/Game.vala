@@ -50,6 +50,22 @@ public class Game:GLib.Object
 	/* Signal emitted when there is a new message */
 	public signal void new_message ();
 
+	~Game ()
+	{
+		stdout.printf ("Game destructor\n");
+		foreach (Player p in players)
+		{
+			if (p is GraphicalPlayer)
+			{
+				GraphicalPlayer gp = p as GraphicalPlayer;
+				if (gp.window != null)
+				{
+					gp.window.destroy ();
+				}
+			}
+		}
+	}
+
 	/**
 	 * Initialize all cards. If graphical is not set to true, the game
 	 * won't possibly run graphically.

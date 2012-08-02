@@ -30,7 +30,7 @@ public class GraphicalPlayer:Player
 	private ulong old_callback;	
 
 	/* Widgets for differents elements */
-	private Gtk.Window window;
+	public Gtk.Window window;
 	private Gtk.Fixed fixed;
 	private Gtk.Button button;
 	private GraphicalHand g_dog;
@@ -38,6 +38,7 @@ public class GraphicalPlayer:Player
 	private Gtk.Image[] players_cards;
 	private Gtk.Grid grid;
 	private SynthethicScore synthetic_score;
+	private Gtk.Dialog dialog;
 
 	/* Const parameters for the positions of differents elements */
 	private static const int[] WINDOW_SIZE = {800,600};
@@ -95,6 +96,22 @@ public class GraphicalPlayer:Player
 	}
 
 	/**
+	 * Delete the window 
+	 **/
+	~GraphicalPlayer ()
+	{
+		stdout.printf ("graph player destructor\n");
+		if (this.window != null)
+		{
+			this.window.destroy ();
+		}
+		if (this.dialog != null)
+		{
+			this.dialog.destroy ();
+		}
+	}
+
+	/**
 	 * GraphicalPlayer constructor
 	 *
 	 * Init a window and the elements to display game information 
@@ -113,7 +130,7 @@ public class GraphicalPlayer:Player
 		window.title = name;
 		window.set_default_size (WINDOW_SIZE[0], WINDOW_SIZE[1]);
 		window.window_position = Gtk.WindowPosition.CENTER;
-		window.destroy.connect (() => {tnt.quit ();});
+//		window.destroy.connect (() => {tnt.quit ();});
 
 		/* Initialize the grid */
 		grid = new Gtk.Grid ();
@@ -320,7 +337,7 @@ public class GraphicalPlayer:Player
 	 **/
 	public override void select_bid (Bid max_bid)
 	{
-		Gtk.Dialog dialog = new Gtk.Dialog.with_buttons ("Select bid", window, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.Stock.OK, 0, null);
+		dialog = new Gtk.Dialog.with_buttons ("Select bid", window, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.Stock.OK, 0, null);
 		Gtk.Container content_area = (Gtk.Container) dialog.get_content_area ();
 
 		/* Display one radiobutton per possible bid */
@@ -357,6 +374,7 @@ public class GraphicalPlayer:Player
 					}
 				}
 				dialog.destroy ();
+				dialog = null;
 				send_bid (bids[active]);
 			});
 				

@@ -33,6 +33,7 @@ public class Tnt:Gtk.Application
 	private bool[] human = {true, false, false, false};
 	public string file_name;
 	private GLib.FileStream stream;
+	public Game game;
 
 	construct
 	{
@@ -120,6 +121,26 @@ public class Tnt:Gtk.Application
 		{
 			menu.remove (0);
 		}
+
+
+		menu.prepend ("End game", "app.end_game");
+		var end_game_action = new SimpleAction ("end_game", null);
+		end_game_action.activate.connect (() =>
+			{
+				stdout.printf ("%d\n", (int) game.ref_count);
+				this.game = null;
+				this.set_app_menu_out_game ();
+				this.stream = GLib.FileStream.open (file_name, "r");
+				this.window.show_all ();
+			});
+		this.add_action (end_game_action);
+		menu.prepend ("Score sheet", "app.scores");
+		var view_score = new SimpleAction ("scores", null);
+		view_score.activate.connect (() =>
+			{
+				this.game.scores.toggle_view ();
+			});
+		this.add_action (view_score);
 	}
 	
 	/**
@@ -163,15 +184,15 @@ public class Tnt:Gtk.Application
 	 **/
 	private void new_game ()
 	{
-		Game tnt_game = new Game ();
-		tnt_game.file_to_save = file_name;
-		tnt_game.init_players (names, human);
+		this.game = new Game ();
+		this.game.file_to_save = file_name;
+		this.game.init_players (names, human);
 		if (this.window != null)
 		{
 			this.window.hide ();
 			set_app_menu_in_game ();
 		}
-		tnt_game.distribute ();
+		this.game.distribute ();
 	}
 
 	/**
@@ -179,15 +200,15 @@ public class Tnt:Gtk.Application
 	 **/
 	private void resume_game (FileStream stream)
 	{
-		Game tnt_game = new Game ();
-		tnt_game.file_to_save = file_name;
-		tnt_game.load (stream);
+		this.game = new Game ();
+		this.game.file_to_save = file_name;
+		this.game.load (stream);
 		if (this.window != null)
 		{
 			this.window.hide ();
 			set_app_menu_in_game ();
 		}
-		tnt_game.distribute ();
+		this.game.distribute ();
 	}
 		
 
