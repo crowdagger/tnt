@@ -27,10 +27,11 @@ public static Tnt tnt;
 
 int main (string[] args)
 {
-	Gtk.init (ref args);
+	Intl.bindtextdomain (Config.PACKAGE_NAME, Config.LOCALEDIR);
+	Intl.bind_textdomain_codeset (Config.PACKAGE_NAME, "UTF-8");
+	Intl.textdomain (Config.PACKAGE_NAME);
 	tnt = new Tnt ();
 	
 	tnt.run (args);
-	Gtk.main ();
     return 0;
 }

@@ -52,7 +52,6 @@ public class Game:GLib.Object
 
 	~Game ()
 	{
-		stdout.printf ("Game destructor\n");
 		foreach (Player p in players)
 		{
 			if (p is GraphicalPlayer)
@@ -176,7 +175,7 @@ public class Game:GLib.Object
 		bool[] humans;
 		if (_names == null)
 		{
-			names = {"Player 1", "Player 2", "Player 3", "Player 4"};
+			names = {_("Player 1"), _("Player 2"), _("Player 3"), _("Player 4")};
 		}
 		else
 		{
@@ -253,19 +252,19 @@ public class Game:GLib.Object
 
         /* Send demands for bids */
 		clear_messages ();
-		add_message ("*** New game ***\n");
+		add_message (_("*** New game ***\n"));
 		int distributer = starter -1;
 		if (distributer < 0)
 		{
 			distributer += nb_players;
 		}
-		add_message ("%s distributes, %s starts\n".printf (players[distributer].name, players[starter].name));
-		add_message ("*** Bids ***\n");
+		add_message (_("%s distributes, %s starts\n").printf (players[distributer].name, players[starter].name));
+		add_message (_("*** Bids ***\n"));
 		for (int i = 0; i < nb_players; i++)
 		{
 			players_bids[i] = Bid.NULL;
 		}
-		add_message ("%s: ".printf (players[current_player].name));
+		add_message (_("%s: ").printf (players[current_player].name));
 		players[current_player].select_bid (Bid.PASSE);
 	}
 
@@ -295,7 +294,7 @@ public class Game:GLib.Object
 		{
 			if (bid <= max_bid)
 			{
-				stdout.printf ("ERROR: a bid must be superior to the other ones (or Passe)\n");
+				stdout.printf (_("ERROR: a bid must be superior to the other ones (or Passe)\n"));
 				return false;
 			}
 			max_bid = bid;
@@ -310,7 +309,7 @@ public class Game:GLib.Object
 		}
 		if (players_bids[current_player] == Bid.NULL)
 		{
-			add_message ("%s: ".printf (players[current_player].name));
+			add_message (_("%s: ").printf (players[current_player].name));
 			players[current_player].select_bid (max_bid);
 		}
 		else
@@ -320,7 +319,7 @@ public class Game:GLib.Object
 				current_player = starter; 
 				current_turn = 0;
 
-				string message = "%s takes %s\n".printf (players[taker].name, max_bid.to_string ());
+				string message = _("%s takes %s\n").printf (players[taker].name, max_bid.to_string ());
 				add_message (message);
 
 				if (max_bid < Bid.GARDE_SANS)
@@ -544,26 +543,26 @@ public class Game:GLib.Object
 				}
 
 				double score = taker_stack.get_score ();
-				string message = "*** Scores ***\n%d points with %d oudlers\n".printf ((int) taker_stack.get_value (), taker_stack.get_nb_oudlers ());
-				message += "Required score: %d\n".printf (taker_stack.required_score ());
-				message += "Difference: %d\n".printf ((int) (taker_stack.get_value () - taker_stack.required_score ()));
+				string message = _("*** Scores ***\n%d points with %d oudlers\n").printf ((int) taker_stack.get_value (), taker_stack.get_nb_oudlers ());
+				message += _("Required score: %d\n").printf (taker_stack.required_score ());
+				message += _("Difference: %d\n").printf ((int) (taker_stack.get_value () - taker_stack.required_score ()));
 					
 				/* Compute new scores and display them */
 				if (score >= 0)
 				{
 					score += 25;
-					message += "Winning bonus: 25\n";
+					message += _("Winning bonus: 25\n");
 				}
 				else
 				{
 					score -= 25;
-					message += "Losing malus: -25\n";
+					message += _("Losing malus: -25\n");
 				}
 				assert(players_bids[taker] != Bid.NULL);
 					
-				message += "Bid: %s; multiplier: %d\n".printf (players_bids[taker].to_string (), (int) players_bids[taker].get_multiplier ());
+				message += _("Bid: %s; multiplier: %d\n").printf (players_bids[taker].to_string (), (int) players_bids[taker].get_multiplier ());
 				score *= players_bids[taker].get_multiplier ();
-				message += "Total: %d\n".printf((int) score);
+				message += _("Total: %d\n").printf((int) score);
 				
 				/* Add scores to the scores object */
 				int[] turn_scores = new int[nb_players];

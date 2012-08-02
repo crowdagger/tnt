@@ -30,9 +30,9 @@ public class About:Gtk.AboutDialog
 		set_program_name (Config.PACKAGE_STRING);
 		set_version (Config.PACKAGE_VERSION);
 		set_authors ({"Élisabeth Henry http://segfault.ouvaton.org"});
-		set_comments ("A simple french tarot game");
+		set_comments (_("A simple french tarot game"));
 		set_license_type (Gtk.License.GPL_2_0);
-		set_artists ({"Cardpics (Guillaume Wexten and Yves Mettier) http://www.nongnu.org/cardpics/"});
+		set_artists ({_("Cardpics (Guillaume Wexten and Yves Mettier) http://www.nongnu.org/cardpics/")});
 		set_wrap_license (false);
 		set_license (
 """
@@ -378,7 +378,7 @@ library.  If this is what you want to do, use the GNU Library General
 Public License instead of this License.
 
 """	);
-		set_copyright ("©2011-2012, Élisabeth Henry.\n This is free software; see License for more information.");
+		set_copyright (_("©2011-2012, Élisabeth Henry.\n This is free software; see License for more information."));
 	}
 
 	/**

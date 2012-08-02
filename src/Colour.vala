@@ -34,19 +34,19 @@ public enum Colour
       switch (this) 
         {
         case SPADE:
-          return "pique";
+			return _("spade");
 
         case HEART:
-          return "coeur";
+			return _("heart");
 
         case DIAMOND:
-          return "carreau";
+			return _("diamond");
           
         case CLUB:
-          return "trèfle";
+			return _("club");
 
         case TRUMP:
-          return "atout";
+			return _("trump");
 
         default:
           assert_not_reached ();

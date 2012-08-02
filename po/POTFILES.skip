@@ -1,3 +1,8 @@
-data/sampala.desktop.in
-src/sampala-gauge.c
-src/sampala-app.c
+src/Tnt.c
+src/About.c
+src/Bid.c
+src/Colour.c
+src/Game.c
+src/GraphicalPlayer.c
+src/Scores.c
+src/SynthethicScore.c

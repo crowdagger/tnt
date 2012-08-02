@@ -32,19 +32,19 @@ public enum Bid
 		switch (this)
 		{
 		case PASSE:
-		return "passe";
+			return _("passe");
 
 		case PETITE:
-		return "petite";
+			return _("petite");
 
 		case GARDE:
-		return "garde";
-
+			return _("garde");
+		
 		case GARDE_SANS:
-		return "garde sans";
+			return _("garde sans");
 
 		case GARDE_CONTRE:
-		return "garde contre";
+			return _("garde contre");
 
 		default:
 		assert_not_reached ();

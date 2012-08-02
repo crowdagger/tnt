@@ -115,7 +115,7 @@ public class Scores:Gtk.TreeView
 		else
 		{
 			window = new Gtk.Window ();
-			window.set_title ("Scores");
+			window.set_title (_("Scores"));
 			window.set_default_size (500, 500);
 			var win = new Gtk.ScrolledWindow (null, null);
 			win.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);

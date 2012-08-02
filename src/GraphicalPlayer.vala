@@ -100,7 +100,6 @@ public class GraphicalPlayer:Player
 	 **/
 	~GraphicalPlayer ()
 	{
-		stdout.printf ("graph player destructor\n");
 		if (this.window != null)
 		{
 			this.window.destroy ();
@@ -154,7 +153,7 @@ public class GraphicalPlayer:Player
 		var win = new Gtk.ScrolledWindow (null, null);
 		win.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 		win.add (synthetic_score);
-		var frame = new Gtk.Frame ("Scores");
+		var frame = new Gtk.Frame (_("Scores"));
 		frame.add (win);
 		frame.set_shadow_type (Gtk.ShadowType.ETCHED_IN);
 		grid.attach (frame, 1, 1, 1, 1);
@@ -172,7 +171,7 @@ public class GraphicalPlayer:Player
 			});
 		win2.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 		win2.add (view);
-		var frame2 = new Gtk.Frame ("Messages");
+		var frame2 = new Gtk.Frame (_("Messages"));
 		frame2.set_shadow_type (Gtk.ShadowType.ETCHED_IN);
 		frame2.add (win2);
 		grid.attach (frame2, 1, 2, 1, 3);
@@ -219,7 +218,7 @@ public class GraphicalPlayer:Player
 		}
 		refresh_players_names (winner);
 
-		button = new Gtk.Button.with_label (game.players[winner].name + " won");
+		button = new Gtk.Button.with_label (_("%s won").printf (game.players[winner].name));
 		fixed.put (button, BUTTON_POS[0], BUTTON_POS[1]);
 		button.clicked.connect (clear_cards);
 		button.show ();
@@ -304,7 +303,7 @@ public class GraphicalPlayer:Player
 	 **/
 	public override void select_bid (Bid max_bid)
 	{
-		dialog = new Gtk.Dialog.with_buttons ("Select bid", window, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.Stock.OK, 0, null);
+		dialog = new Gtk.Dialog.with_buttons (_("Select bid"), window, Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.Stock.OK, 0, null);
 		Gtk.Container content_area = (Gtk.Container) dialog.get_content_area ();
 
 		/* Display one radiobutton per possible bid */
@@ -353,7 +352,7 @@ public class GraphicalPlayer:Player
 	 **/
 	public override void request_new_game ()
 	{
-		button = new Gtk.Button.with_label ("New game");
+		button = new Gtk.Button.with_label (_("New game"));
 		fixed.put (button, BUTTON_POS[0], BUTTON_POS[1]);
 		button.clicked.connect (() =>
 			{
@@ -372,7 +371,7 @@ public class GraphicalPlayer:Player
 		g_dog = new GraphicalHand (dog);
 		fixed.put (g_dog, DOG_POS[0], DOG_POS[1]);
 		
-		button = new Gtk.Button.with_label ("OK");
+		button = new Gtk.Button.with_label (_("OK"));
 		fixed.put (button, BUTTON_POS[0], BUTTON_POS[1]);
 		
 		/* If the player took, she gets the dogs; else, she only sees
@@ -445,8 +444,8 @@ public class GraphicalPlayer:Player
 		}
 		if (number_selected != 6)
 		{
-			var dialog = new Gtk.MessageDialog (null,Gtk.DialogFlags.MODAL,Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "The dog must contain six cards"); 
-			dialog.set_title("Dog error");
+			var dialog = new Gtk.MessageDialog (null,Gtk.DialogFlags.MODAL,Gtk.MessageType.INFO, Gtk.ButtonsType.OK, _("The dog must contain six cards")); 
+			dialog.set_title(_("Dog error"));
 			dialog.run();
 			dialog.destroy ();
 		}

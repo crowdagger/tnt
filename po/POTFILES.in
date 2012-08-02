@@ -1,2 +1,9 @@
 [encoding: UTF-8]
 src/Tnt.vala
+src/About.vala
+src/Bid.vala
+src/Colour.vala
+src/Game.vala
+src/GraphicalPlayer.vala
+src/Scores.vala
+src/SynthethicScore.vala

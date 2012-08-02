@@ -57,8 +57,8 @@ public class SynthethicScore:Gtk.TreeView
 
 		/* Add renderer and columns */
 		Gtk.CellRendererText renderer = new Gtk.CellRendererText ();
-		Gtk.TreeViewColumn names = new Gtk.TreeViewColumn.with_attributes ("Names", renderer, "text", 0);
-		Gtk.TreeViewColumn scores = new Gtk.TreeViewColumn.with_attributes ("Scores", renderer, "text", 1);
+		Gtk.TreeViewColumn names = new Gtk.TreeViewColumn.with_attributes (_("Names"), renderer, "text", 0);
+		Gtk.TreeViewColumn scores = new Gtk.TreeViewColumn.with_attributes (_("Scores"), renderer, "text", 1);
 		this.append_column (names);
 		this.append_column (scores);
 		this.set_sensitive (false);
