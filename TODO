@@ -1,9 +1,41 @@
-Bugs:
-- Petit au bout, poignée are not handled.
+TODO
+====
 
-TODO:
-- better IA
-- adds gettext support
-- better graphics
-- app file
-- code cleaning!
+For 1.0
+=======
+
+Tarot rules
+-----------
+- Support petit au bout, poignée, and misère.
+
+Internationalization
+--------------------
+- Add gettext support.
+- At least translate in french.
+
+Artificial Intelligence
+-----------------------
+- Enhance default IA.
+- Have different IA players play (even sligthly) differently.
+
+GUI
+---
+- Remove useless initial window.
+- Make the following application menu:
+---
+New game
+Save game to...
+Load game from...
+---
+View score sheet
+---
+About
+---
+Quit
+---
+- Fix moving-widgets bugs.
+
+Code cleaning
+-------------
+- Clean and refactorize.
+- Check for errors and exceptions.
