@@ -7,3 +7,4 @@ src/Game.vala
 src/GraphicalPlayer.vala
 src/Scores.vala
 src/SynthethicScore.vala
+data/tnt.desktop.in.in

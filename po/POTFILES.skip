@@ -6,3 +6,4 @@ src/Game.c
 src/GraphicalPlayer.c
 src/Scores.c
 src/SynthethicScore.c
+data/tnt.desktop.in

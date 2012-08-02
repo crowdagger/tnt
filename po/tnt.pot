@@ -1,85 +1,81 @@
-# French translations for TnT package
-# Traductions françaises du paquet TnT.
-# Copyright (C) 2012 THE TnT'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the TnT package.
-# Liz <liz.henry@ouvaton.org>, 2012.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: TnT 0.3\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-02 18:23+0200\n"
-"PO-Revision-Date: 2012-08-02 16:32+0200\n"
-"Last-Translator: Liz <liz.henry@ouvaton.org>\n"
-"Language-Team: French\n"
-"Language: fr\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../src/Tnt.vala:41 ../src/Game.vala:178
 msgid "Player 2"
-msgstr "Joueuse 2"
+msgstr ""
 
 #: ../src/Tnt.vala:42 ../src/Game.vala:178
 msgid "Player 3"
-msgstr "Joueuse 3"
+msgstr ""
 
 #: ../src/Tnt.vala:43 ../src/Game.vala:178
 msgid "Player 4"
-msgstr "Joueuse 4"
+msgstr ""
 
 #: ../src/Tnt.vala:56
 #, c-format
 msgid "Ooops: could not register application\n"
-msgstr "Oups : impossible d'enregister l'application\n"
+msgstr ""
 
 #: ../src/Tnt.vala:85 ../src/Tnt.vala:159 ../src/GraphicalPlayer.vala:355
 msgid "New game"
-msgstr "Nouvelle partie"
+msgstr ""
 
 #: ../src/Tnt.vala:93
 msgid "Score sheet"
-msgstr "Feuille de scores"
+msgstr ""
 
 #: ../src/Tnt.vala:105
 msgid "About"
-msgstr "À propos"
+msgstr ""
 
 #: ../src/Tnt.vala:106
 msgid "Quit"
-msgstr "Quitter"
+msgstr ""
 
 #: ../src/Tnt.vala:164
 msgid "Players settings"
-msgstr "Paramètres des joueuses"
+msgstr ""
 
 #: ../src/Tnt.vala:171
 msgid "Name: "
-msgstr "Nom : "
+msgstr ""
 
 #: ../src/Tnt.vala:176
 msgid "Human"
-msgstr "Être humain"
+msgstr ""
 
 #: ../src/About.vala:33
 msgid "A simple french tarot game"
-msgstr "Un petit jeu de tarot"
+msgstr ""
 
 #: ../src/About.vala:35
 msgid ""
 "Cardpics (Guillaume Wexten and Yves Mettier) http://www.nongnu.org/cardpics/"
 msgstr ""
-"Cardpics (Guillaume Wexten et Yves Mettier) http://www.nongnu.org/cardpics/"
 
 #: ../src/About.vala:381
 msgid ""
 "©2011-2012, Élisabeth Henry.\n"
 " This is free software; see License for more information."
 msgstr ""
-"©2011-2012, Élisabeth Henry.\n"
-" Ce logiciel est libre ; voir la Licence pour plus d'informations."
 
 #: ../src/Bid.vala:35
 msgid "passe"
@@ -123,35 +119,35 @@ msgstr ""
 
 #: ../src/Game.vala:178
 msgid "Player 1"
-msgstr "Joueuse 1"
+msgstr ""
 
 #: ../src/Game.vala:255
 msgid "*** New game ***\n"
-msgstr "*** Nouvelle partie ***\n"
+msgstr ""
 
 #: ../src/Game.vala:261
 #, c-format
 msgid "%s distributes, %s starts\n"
-msgstr "%s distribue, %s commence\n"
+msgstr ""
 
 #: ../src/Game.vala:262
 msgid "*** Bids ***\n"
-msgstr "*** Enchères ***\n"
+msgstr ""
 
 #: ../src/Game.vala:267 ../src/Game.vala:312
 #, c-format
 msgid "%s: "
-msgstr "%s : "
+msgstr ""
 
 #: ../src/Game.vala:297
 #, c-format
 msgid "ERROR: a bid must be superior to the other ones (or Passe)\n"
-msgstr "ERREUR : une enchère doit être supérieure aux précédentes, ou Passe\n"
+msgstr ""
 
 #: ../src/Game.vala:322
 #, c-format
 msgid "%s takes %s\n"
-msgstr "%s prend une %s\n"
+msgstr ""
 
 #: ../src/Game.vala:546
 #, c-format
@@ -159,41 +155,39 @@ msgid ""
 "*** Scores ***\n"
 "%d points with %d oudlers\n"
 msgstr ""
-"*** Scores ***\n"
-"%d points avec %d bouts\n"
 
 #: ../src/Game.vala:547
 #, c-format
 msgid "Required score: %d\n"
-msgstr "Score nécessaire : %d\n"
+msgstr ""
 
 #: ../src/Game.vala:548
 #, c-format
 msgid "Difference: %d\n"
-msgstr "Différence : %d\n"
+msgstr ""
 
 #: ../src/Game.vala:554
 msgid "Winning bonus: 25\n"
-msgstr "Bonus de victoire : 25\n"
+msgstr ""
 
 #: ../src/Game.vala:559
 msgid "Losing malus: -25\n"
-msgstr "Malus de défaite : -25\n"
+msgstr ""
 
 #: ../src/Game.vala:563
 #, c-format
 msgid "Bid: %s; multiplier: %d\n"
-msgstr "Enchère : %s ; coefficient : %d\n"
+msgstr ""
 
 #: ../src/Game.vala:565
 #, c-format
 msgid "Total: %d\n"
-msgstr "Total : %d\n"
+msgstr ""
 
 #: ../src/GraphicalPlayer.vala:156 ../src/Scores.vala:118
 #: ../src/SynthethicScore.vala:61
 msgid "Scores"
-msgstr "Scores"
+msgstr ""
 
 #: ../src/GraphicalPlayer.vala:174
 msgid "Messages"
@@ -202,11 +196,11 @@ msgstr ""
 #: ../src/GraphicalPlayer.vala:221
 #, c-format
 msgid "%s won"
-msgstr "%s remporte le pli"
+msgstr ""
 
 #: ../src/GraphicalPlayer.vala:306
 msgid "Select bid"
-msgstr "Enchère"
+msgstr ""
 
 #: ../src/GraphicalPlayer.vala:374
 msgid "OK"
@@ -214,15 +208,15 @@ msgstr ""
 
 #: ../src/GraphicalPlayer.vala:447
 msgid "The dog must contain six cards"
-msgstr "Le chien doit contenir six cartes"
+msgstr ""
 
 #: ../src/GraphicalPlayer.vala:448
 msgid "Dog error"
-msgstr "Erreur canine"
+msgstr ""
 
 #: ../src/SynthethicScore.vala:60
 msgid "Names"
-msgstr "Noms"
+msgstr ""
 
 #: ../data/tnt.desktop.in.in.h:1
 msgid "TnT"
@@ -234,4 +228,4 @@ msgstr ""
 
 #: ../data/tnt.desktop.in.in.h:3
 msgid "Tiny french tarot game"
-msgstr "Un petit jeu de tarot"
+msgstr ""

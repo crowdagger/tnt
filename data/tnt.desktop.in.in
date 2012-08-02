@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
 Version=0.3
-Name=TnT
-GenericName=Tiny 'Nux Tarot
-Comment=Tiny french tarot game
+_Name=TnT
+_GenericName=Tiny 'Nux Tarot
+_Comment=Tiny french tarot game
 Exec=tnt
 Icon=application-default-icon
 Terminal=false
