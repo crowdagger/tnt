@@ -17,7 +17,7 @@ AM_PROG_VALAC([0.12.0])
 AC_PROG_INSTALL
 #IT_PROG_INTLTOOL([0.35])
 
-pkg_modules="gtk+-3.0 >= 3.2.0 gee-1.0 >= 0.6.0 glib-2.0 >= 2.30.0"
+pkg_modules="gtk+-3.0 >= 3.4.0 gee-1.0 >= 0.6.0 glib-2.0 >= 2.30.0"
 TNT_PACKAGES="--pkg gtk+-3.0 --pkg gee-1.0"
 PKG_CHECK_MODULES(TNT, [$pkg_modules])
 AC_SUBST(TNT_CFLAGS)
