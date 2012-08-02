@@ -1,17 +1,12 @@
 TODO
 ====
 
-For 1.0
-=======
+What should be in 1.0
+=====================
 
 Tarot rules
 -----------
 - Support petit au bout, poignée, and misère.
-
-Internationalization
---------------------
-- Add gettext support.
-- At least translate in french.
 
 Artificial Intelligence
 -----------------------
@@ -20,20 +15,8 @@ Artificial Intelligence
 
 GUI
 ---
-- Remove useless initial window.
-- Make the following application menu:
----
-New game
-Save game to...
-Load game from...
----
-View score sheet
----
-About
----
-Quit
----
-- Fix moving-widgets bugs.
+- Improve card and players placement
+- Improve the way the game displays information
 
 Code cleaning
 -------------

@@ -1,12 +1,13 @@
 	*** ChangeLog ***
 
-Version 0.3 (????):
+Version 0.3 (2012-08-02):
   - "Garde sans" and "Garde contre" are now handled.
   - A table of score is now displayed instead of just a string.
   - Game messages are now displayed in a TextView, trying to avoid too much dialogues
-  - Some basic GUI work.
+  - GUI improvements
   - Excuse is now handled correctly.
   - Possibility to resume game and gets the same scores.
+  - Added internationalization support and a french translation
 
 Version 0.2 (2012-07-14):
   - Enhanced IA, which can now take.
