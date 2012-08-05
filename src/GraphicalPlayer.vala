@@ -135,7 +135,7 @@ public class GraphicalPlayer:Player
 
 		/* Initialize the grid */
 		grid = new Gtk.Grid ();
-		grid.set_row_homogeneous (false);
+		grid.set_column_homogeneous (true);
 		grid.set_row_spacing (10);
 		grid.set_column_homogeneous (false);
 		grid.set_column_spacing (10);
@@ -210,7 +210,7 @@ public class GraphicalPlayer:Player
 		}
 		for (int i = 0; i < cards.length; i++)
 		{
-			players_cards[i] = new Gtk.Image.from_file (((GraphicalCard)cards[i]).image_file);
+			players_cards[i] = (cards[i] as GraphicalCard).get_image ();
 			assert (players_cards[i] != null);
 
 			fixed.put (players_cards[i], PLAYERS_CARDS_POS[i,0], PLAYERS_CARDS_POS[i,1]);
@@ -492,7 +492,7 @@ public class GraphicalPlayer:Player
 			{
 				assert (cards[i] is GraphicalCard);
 				GraphicalCard c = (GraphicalCard) cards[i];
-				players_cards[i] = new Gtk.Image.from_file (c.image_file);
+				players_cards[i] = c.get_image ();
 				fixed.put (players_cards[i], PLAYERS_CARDS_POS[i,0], PLAYERS_CARDS_POS[i,1]);
 				players_cards[i].show ();
 			}

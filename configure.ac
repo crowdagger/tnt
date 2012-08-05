@@ -37,5 +37,6 @@ AC_CONFIG_FILES([
   data/Makefile
   data/cards/Makefile
   po/Makefile.in
+  data/tnt.desktop.in
 ])
 AC_OUTPUT

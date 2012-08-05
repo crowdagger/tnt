@@ -26,8 +26,8 @@
  **/
 public class GraphicalCard:Card
 {
-	public string image_file {get; private set;}
 	public bool is_selected {get; set;}
+	private string image_file;
 
 	public signal void select ();
 
@@ -77,7 +77,33 @@ public class GraphicalCard:Card
 			else
 				image_file = (rank+55).to_string ();
 		}
-		image_file = Config.PKGDATADIR+"/cards/"+image_file+".png";	
+		image_file = "cards/"+image_file+".png";
+	}
+
+	/**
+	 * Return a (new) Gtk.Image displaying the card.
+	 **/
+	public Gtk.Image get_image ()
+	{
+		Gdk.Pixbuf pixbuf = null;
+		/* Try to load the pixbuf; first from Config.PKGDATADIR, then from local dir (if TnT is not installed) */
+		try {
+			pixbuf = new Gdk.Pixbuf.from_file (Config.PKGDATADIR + "/" + image_file);
+		}
+		catch (GLib.Error e)
+		{
+			try {
+				pixbuf = new Gdk.Pixbuf.from_file ("data/" + image_file);
+			}
+			catch (GLib.Error error)
+			{
+				stderr.printf (_("Error: could not open card picture.\n"));
+				stderr.printf ("%s\n", error.message);
+				tnt.quit ();
+			}
+		}
+		Gtk.Image image = new Gtk.Image.from_pixbuf (pixbuf);
+		return image;
 	}
 
 	public void switch_selected ()

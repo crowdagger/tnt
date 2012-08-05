@@ -59,7 +59,7 @@ public class GraphicalHand:Gtk.VBox
 			GraphicalCard card = (GraphicalCard) c;
 
 			var box = new Gtk.EventBox ();
-			var image = new Gtk.Image.from_file (card.image_file);
+			var image = card.get_image ();
 			box.add (image);
 
 			box.button_press_event.connect (() =>
