@@ -25,3 +25,6 @@ po/Makefile.in.in
 po/POTFILES
 po/stamp-it
 po/*.gmo
+data/tnt.desktop
+data/tnt.desktop.in
+po/.intltool-merge-cache
