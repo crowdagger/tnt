@@ -25,7 +25,7 @@ INCLUDES = \
 	-DPKGLIBDIR=\""$(pkglibdir)"\"
 
 VALAFLAGS = \
-	--vapidir=$(srcdir)/../vapi --pkg config \
+	-g --vapidir=$(srcdir)/../vapi --pkg config \
 	@TNT_PACKAGES@
 
 tnt_LDADD = \

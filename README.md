@@ -25,6 +25,10 @@ to do the usual:
     
 Assuming you have Gtk+>3.4, libgee and libvala.
 
+(Actually, it's not mandatory to "make install": TnT should run
+relatively fine – at least if you don't need translations – if you
+just invoke it with "src/tnt".)
+
 If you get the code from the git repository, you'll also need a vala
 compiler and the autotools, and to run 
 
