@@ -81,6 +81,7 @@ public class Tnt:Gtk.Application
 		base.startup ();
 
 		var menu = new Menu ();
+		this.app_menu = menu;
 
 		menu.append (_("New game"), "app.new_game");
 		var new_game = new SimpleAction ("new_game", null);
@@ -101,10 +102,28 @@ public class Tnt:Gtk.Application
 			});
 		this.add_action (view_score);
 
+		menu.append (_("Help"), "app.help");
+		var help = new SimpleAction ("help", null);
+		help.activate.connect (() =>
+			{
+				unowned GLib.List<Gtk.Window> windows = this.get_windows ();
+				try
+				{
+					Gtk.show_uri (windows.data.get_screen (), "help:tnt", Gdk.CURRENT_TIME);
+				}
+				catch (Error e)
+				{
+					stderr.printf (_("Could not open the help: %s"), e.message);
+				}
+			});
+		this.add_action (help);
+
 
 		menu.append (_("About"), "app.about");
 		menu.append (_("Quit"), "app.quit");
-		this.app_menu = menu;
+
+		
+		
 
 		var about_action = new SimpleAction ("about", null);
 		about_action.activate.connect (() => 

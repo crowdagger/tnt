@@ -30,6 +30,8 @@ AC_SUBST(GETTEXT_PACKAGE)
 AM_GNU_GETTEXT_VERSION([1.11])
 AM_GLIB_GNU_GETTEXT
 
+YELP_HELP_INIT
+
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
@@ -38,5 +40,6 @@ AC_CONFIG_FILES([
   data/cards/Makefile
   po/Makefile.in
   data/tnt.desktop.in
+  help/Makefile
 ])
 AC_OUTPUT
