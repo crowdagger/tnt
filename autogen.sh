@@ -1,7 +1,9 @@
-REQUIRED_AUTOMAKE_VERSION=1.9 
-REQUIRED_YELP_TOOLS_VERSION=3.1.1
-REQUIRED_GETTEXT_VERSION=0.12
-REQUIRED_INTLTOOL_VERSION=0.40.4
+GNOMEDOC=`which yelp-build`
+if test -z $GNOMEDOC; then
+echo "Error: yelp-build (used for building the documentation) is missing."
+echo "Please install the yelp-tools package."
+exit 1
+fi
 
 test -n "$srcdir" || srcdir=$(dirname "$0")
 test -n "$srcdir" || srcdir=.
