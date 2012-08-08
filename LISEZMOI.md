@@ -1,5 +1,3 @@
-% Tiny 'Nux Tarot
-
 Tiny 'Nux Tarot
 ===============
 
@@ -24,7 +22,7 @@ Screenshots
 Installation
 ------------
 
-# Dépendances #
+### Dépendances ###
 
 Pour pouvoir être lancé, Tiny 'Nux Tarot a besoin des bibliothèques
 suivantes :
@@ -35,18 +33,20 @@ suivantes :
 Si vous voulez le compiler, vous aurez également besoin des outils
 habituels pour cela, comme gcc et make.
 
-# Installation depuis un paquet #
+### Installation depuis un paquet ###
 
-Currently, Tiny 'Nux Tarot is not available in distribution repositories,
-but I try to make Debian packages and would gladfully host other
-packages. If you are under Debian, you can look at the [download
-page](http://tnt.ouvaton.org/dl/) and see if there is a package that
-fits your architecture.
+Actuellement, Tiny 'Nux Tarot n'est pas disponible dans les archives
+des distributions, mais je suis en train d'essayer de faire des
+paquets Debian (et serais heureuse d'accueillir des paquets pour
+d'autres distributions). Si vous êtes sous Debian, vous pouvez
+regarder la [page de téléchargements](http://tnt.ouvaton.org/dl/) et
+voir s'il y a un paquet qui correspond à votre architecture.
 
-# Installing from a source tarball #
+### Installer depuis les sources (tarball) ###
 
-The simplest way is to download the code from the [latest tarball](http://tnt.ouvaton.org/dl/tnt-latest.tar.bz2), and
-to run the usual:
+Le plus simple est de télécharger la
+[dernière tarball](http://tnt.ouvaton.org/dl/tnt-latest.tar.bz2), et
+de faire les habituels :
 
     $ tar xjf tnt-latest.tar.bz2
     $ cd tnt-0.3
@@ -54,40 +54,36 @@ to run the usual:
     $ make
     $ sudo make install
 
-Note: as Vala source files are already precompiled in C, you won't need a
-Vala compiler in order to achieve this.
+Remarque: comme les fichiers sources Vala sont déjà précompilés en C,
+vous n'avez pas besoin du compilateur Vala, juste de Gcc.
 
-If everything goes well, all you have to do now is launch `tnt`, either
-by the command line or from the menu. 
+Si tout va bien, vous pouvez maintenant lancer `tnt`, soit par ligne
+de commande, soit par le menu.
 
-# Downloading the latest version #
+### Compiler la dernière version ###
 
-If you want the latest version, you can use `git' to download the sources:
+Vous pouvez utiliser `git' pour télécharger les dernière sources :
 
     git://github.com/lady-segfault/tnt.git
 
-In this case, you will additionally need the Vala compiler and yelp-tools.
+Dans ce cas, vous aurez également besoin du compilateur Vala et de yelp-tools.
 
-Usage
------
-Simply typing:
-
-    $ tnt
+Utilisation
+-----------
+Au lancement, Tiny 'Nux Tarot vous propose de lancer une nouvelle
+partie si vous venez de l'installer, ou reprend automatiquement un jeu
+existant si vous avez déjà joué (seuls les scores sont sauvés, à la
+fin de chaque partie).
     
-should launch a new game if you just installed it, or resume your
-previous game if you already played (only the scores are saved at the
-end of each game, though).
-    
-Playing
--------
-See the [rules on Wikipedia](http://en.wikipedia.org/wiki/French_tarot)
-
-GUI is pretty basic: click on a card to play it or select/unselect it
-for your dog. Click the "OK" button at the end of the turn. The
-name of the player name who took is displayed in red (with skulls),
-the name of the one who won the precedent turn is displayed in
-blue. Some messages also appear at the right to give you some
-information about who distributes or what are the bids and scores.
+Jeu
+---
+L'interface graphique est assez basique : cliquer sur une carte permet
+de la jouer ou de la choisir pour le chien. Cliquez aussi sur le
+bouton "OK" à la fin du tour. Le nom du joueur qui a pris est indiqué
+en rouge (avec des têtes de mort), le nom de celle qui a commencé le
+tour est affiché en bleu. Des messages apparaissent aussi à droite de
+l'écran pour vous donner quelques informations sur qui distribuet ou
+quels sont les enchères et les scores.
 
 Contact
 -------

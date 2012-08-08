@@ -1,22 +1,27 @@
-	*** ChangeLog ***
+ChangeLog
+---------
 
-Version 0.3.1 (?):
-  - TnT now checks for error when loading card pictures, and can be
-    runned without being installed.
+### Version 0.3.1 (?) ###
 
-Version 0.3 (2012-08-02):
-  - "Garde sans" and "Garde contre" are now handled.
-  - A table of score is now displayed instead of just a string.
-  - Game messages are now displayed in a TextView, trying to avoid too
-    much dialogues 
-  - GUI improvements
-  - Excuse is now handled correctly.
-  - Possibility to resume game and gets the same scores.
-  - Added internationalization support and a french translation
+* Added desktop icon.
+* Added stubs for help.
+* TnT now checks for error when loading card pictures, and can be
+  runned without being installed. 
 
-Version 0.2 (2012-07-14):
-  - Enhanced IA, which can now take.
-  - Minor enhancements to the GUI.
+### Version 0.3 (2012-08-02) ###
 
-Version 0.1 (2012-02-21):
-	- Initial release.
+* "Garde sans" and "Garde contre" are now handled.
+* A table of score is now displayed instead of just a string.
+* Game messages are now displayed in a TextView, trying to avoid too
+  much dialogues  
+* GUI improvements
+* Excuse is now handled correctly.
+* Possibility to resume game and gets the same scores.
+* Added internationalization support and a french translation
+
+### Version 0.2 (2012-07-14) ###
+* Enhanced IA, which can now take.
+* Minor enhancements to the GUI.
+
+### Version 0.1 (2012-02-21) ###
+* Initial release.

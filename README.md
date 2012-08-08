@@ -1,5 +1,3 @@
-% Tiny 'Nux Tarot
-
 Tiny 'Nux Tarot
 ===============
 
@@ -8,7 +6,8 @@ About
 Tiny 'Nux Tarot (TnT) is a french tarot game. Its main feature is to allow
 to play tarot even when you don't have friends. Latest version is 0.3.
 
-TnT is written in Vala and uses the Gtk+ library.
+TnT is written in Vala, uses the Gtk+ library, and is released under
+the GNU General Public License.
 
 Features
 --------
@@ -25,7 +24,7 @@ Screenshots
 Installation
 ------------
 
-# Dependencies #
+### Dependencies ###
 
 In order to run, Tiny 'Nux Tarot requires the following libraries:
 
@@ -35,7 +34,7 @@ In order to run, Tiny 'Nux Tarot requires the following libraries:
 If you want to compile, you will also need the usual tools: gcc, and
 make.
 
-# Installing from a package #
+### Installing from a package ###
 
 Currently, Tiny 'Nux Tarot is not available in distribution repositories,
 but I try to make Debian packages and would gladfully host other
@@ -43,7 +42,7 @@ packages. If you are under Debian, you can look at the [download
 page](http://tnt.ouvaton.org/dl/) and see if there is a package that
 fits your architecture.
 
-# Installing from a source tarball #
+### Installing from a source tarball ###
 
 The simplest way is to download the code from the [latest tarball](http://tnt.ouvaton.org/dl/tnt-latest.tar.bz2), and
 to run the usual:
@@ -60,7 +59,7 @@ Vala compiler in order to achieve this.
 If everything goes well, all you have to do now is launch `tnt`, either
 by the command line or from the menu. 
 
-# Downloading the latest version #
+### Downloading the latest version ###
 
 If you want the latest version, you can use `git' to download the sources:
 
