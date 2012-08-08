@@ -21,6 +21,7 @@
 ***********************************************************************/
 
 public static extern void exit (int status);
+public static Tnt tnt;
 
 /**
  * This class inherits Gtk.Application and lauches new games
@@ -232,5 +233,13 @@ public class Tnt:Gtk.Application
 		box.show_all ();
 
 		dialog.run ();
+	}
+
+	public static int main (string[] args)
+	{
+		tnt = new Tnt ();
+		tnt.run (args);
+
+		return 0;
 	}
 }

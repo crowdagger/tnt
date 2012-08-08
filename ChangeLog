@@ -3,6 +3,7 @@ ChangeLog
 
 ### Version 0.3.1 (?) ###
 
+* Removed main.vala file
 * Added desktop icon.
 * Added stubs for help.
 * TnT now checks for error when loading card pictures, and can be

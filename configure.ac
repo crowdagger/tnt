@@ -1,7 +1,7 @@
 # configure.ac
 
 AC_INIT([TnT],[0.3.1])
-AC_CONFIG_SRCDIR([src/main.vala])
+AC_CONFIG_SRCDIR([src/Tnt.vala])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([no-dist-gzip dist-bzip2])

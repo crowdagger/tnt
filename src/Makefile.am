@@ -1,7 +1,6 @@
 bin_PROGRAMS = tnt
 
 tnt_SOURCES = \
-	main.vala \
 	Bid.vala \
 	Card.vala \
 	Colour.vala \
