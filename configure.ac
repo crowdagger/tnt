@@ -9,7 +9,7 @@ AM_INIT_AUTOMAKE([no-dist-gzip dist-bzip2])
 # Enable silent rules is available
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
-AM_MAINTAINER_MODE
+AM_MAINTAINER_MODE([enable])
 
 AC_PROG_CC
 AC_PROG_CC_STDC
@@ -41,5 +41,12 @@ AC_CONFIG_FILES([
   po/Makefile.in
   data/tnt.desktop.in
   help/Makefile
+	data/icons/Makefile
+	data/icons/16x16/Makefile
+	data/icons/22x22/Makefile
+	data/icons/24x24/Makefile
+	data/icons/32x32/Makefile
+	data/icons/48x48/Makefile
+	data/icons/scalable/Makefile
 ])
 AC_OUTPUT
