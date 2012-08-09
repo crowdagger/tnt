@@ -24,13 +24,14 @@
 /**
  * This class displays the hand of the player, and allows to select which card to play.
  **/
-public class GraphicalHand:Gtk.VBox
+public class GraphicalHand:Gtk.Frame
 {
 	public Hand hand {get; private set;}
 	private Gtk.Fixed fixed = null;
 
 	public GraphicalHand (Hand hand)
 	{
+		Object (label: _("Hand"));
 		this.hand = hand;
 		refresh ();
 	}
