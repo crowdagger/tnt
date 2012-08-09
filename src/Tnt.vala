@@ -81,65 +81,99 @@ public class Tnt:Gtk.Application
 	protected override void startup () {
 		base.startup ();
 
-		var menu = new Menu ();
-		this.app_menu = menu;
-
-		menu.append (_("New game"), "app.new_game");
-		var new_game = new SimpleAction ("new_game", null);
-		new_game.activate.connect (() =>
+		const string builder_description = 
+		""" <interface>
+		  <menu id = 'app-menu'>
+		  <section>
+		   <item>
+		   <attribute name='label' translatable='yes'>New Game</attribute>
+		   <attribute name='action'>app.new_game</attribute>
+		   </item>
+           <item>
+		   <attribute name='label' translatable='yes'>Score sheet</attribute>
+		   <attribute name='action'>app.scores</attribute>
+		   </item>
+		  </section>
+		  <section>
+		   <item>
+		   <attribute name='label' translatable='yes'>_Help</attribute>
+		   <attribute name='action'>app.help</attribute>
+		   <attribute name='accel'>F1</attribute>
+		   </item>
+		   <item>
+		   <attribute name='label' translatable='yes'>_About</attribute>
+		   <attribute name='action'>app.about</attribute>
+		   </item>
+		  </section>
+		  <section>
+		   <item>
+		   <attribute name='label' translatable='yes'>_Quit</attribute>
+		   <attribute name='action'>app.quit</attribute>
+		   <attribute name='accel'>&lt;Primary&gt;q</attribute>
+		   </item>
+		  </section>
+		  </menu>
+		 </interface>""";
+		Gtk.Builder builder = new Gtk.Builder ();
+		try
 		{
-			this.new_game ();
-		});
-		this.add_action (new_game);
+			builder.add_from_string (builder_description, -1);
+			this.app_menu = builder.get_object ("app-menu") as GLib.MenuModel;
 
-		menu.append (_("Score sheet"), "app.scores");
-		var view_score = new SimpleAction ("scores", null);
-		view_score.activate.connect (() =>
-			{
-				if (this.game != null)
+			var new_game = new SimpleAction ("new_game", null);
+			new_game.activate.connect (() =>
 				{
-					this.game.scores.toggle_view ();
-				}
-			});
-		this.add_action (view_score);
-
-		menu.append (_("Help"), "app.help");
-		var help = new SimpleAction ("help", null);
-		help.activate.connect (() =>
-			{
-				unowned GLib.List<Gtk.Window> windows = this.get_windows ();
-				try
+					this.new_game ();
+				});
+			this.add_action (new_game);
+			
+			var view_score = new SimpleAction ("scores", null);
+			view_score.activate.connect (() =>
 				{
-					Gtk.show_uri (windows.data.get_screen (), "help:tnt", Gdk.CURRENT_TIME);
-				}
-				catch (Error e)
+					if (this.game != null)
+					{
+						this.game.scores.toggle_view ();
+					}
+				});
+			this.add_action (view_score);
+			
+			var help = new SimpleAction ("help", null);
+			help.activate.connect (() =>
 				{
-					stderr.printf (_("Could not open the help: %s"), e.message);
-				}
-			});
-		this.add_action (help);
+					unowned GLib.List<Gtk.Window> windows = this.get_windows ();
+					try
+					{
+						Gtk.show_uri (windows.data.get_screen (), "help:tnt", Gdk.CURRENT_TIME);
+					}
+					catch (Error e)
+					{
+						stderr.printf (_("Could not open the help: %s"), e.message);
+					}
+				});
+			this.add_action (help);
+			
 
-
-		menu.append (_("About"), "app.about");
-		menu.append (_("Quit"), "app.quit");
-
+			var about_action = new SimpleAction ("about", null);
+			about_action.activate.connect (() => 
+				{
+					About dialog = new About ();
+					dialog.run ();
+				});
+			this.add_action (about_action);
+			var quit_action = new SimpleAction ("quit", null);
+			quit_action.activate.connect (() => {this.quit ();});
+			this.add_action (quit_action);
+		}
+		catch (GLib.Error e)
+		{
+			stderr.printf (_("Error creating application menu: %s\n"), e.message);
+		}
+			
+			
+		}
 		
 		
-
-		var about_action = new SimpleAction ("about", null);
-		about_action.activate.connect (() => 
-			{
-				About dialog = new About ();
-				dialog.run ();
-			});
-		this.add_action (about_action);
-		var quit_action = new SimpleAction ("quit", null);
-		quit_action.activate.connect (() => {this.quit ();});
-		this.add_action (quit_action);
-	}
-
-	
-	/**
+		/**
 	 * End a game, but don't quit the game
 	 **/
 	public void end_game ()
