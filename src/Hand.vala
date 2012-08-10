@@ -247,7 +247,7 @@ public class Hand:Object
 			foreach (Card c in list)
 			{
 				assert (card != null);
-				if (c.colour == first_card.colour)
+				if (c.colour == first_card.colour && c.is_excuse () == false)
 				{
 					colour_available = true;
 					break;
