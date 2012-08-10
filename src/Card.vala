@@ -49,6 +49,21 @@ public class Card:GLib.Object
 			return false;
 		}
 	}
+
+	/** 
+	 * Returns true if the card is the excuse, false else 
+	 **/
+	public bool is_excuse ()
+	{
+		if (colour == Colour.TRUMP && rank == 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	/* Return true if this card can defeat the other one.
 	   Not usable for sorting cards, only to determine whether
