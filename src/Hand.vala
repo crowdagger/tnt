@@ -311,7 +311,7 @@ public class Hand:Object
 					foreach (Card c in list)
 					{
 						assert (c != null);
-						if (c.colour == Colour.TRUMP)
+						if (c.colour == Colour.TRUMP && c.rank != 0)
 						{
 							trump_available = true;
 							break;
