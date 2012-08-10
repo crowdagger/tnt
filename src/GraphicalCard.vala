@@ -81,9 +81,9 @@ public class GraphicalCard:Card
 	}
 
 	/**
-	 * Return a (new) Gtk.Image displaying the card.
+	 * Return a (new) pixbuf displaying the card.
 	 **/
-	public Gtk.Image get_image ()
+	public Gdk.Pixbuf get_pixbuf ()
 	{
 		Gdk.Pixbuf pixbuf = null;
 		/* Try to load the pixbuf; first from Config.PKGDATADIR, then from local dir (if TnT is not installed) */
@@ -102,8 +102,17 @@ public class GraphicalCard:Card
 				tnt.quit ();
 			}
 		}
-		Gtk.Image image = new Gtk.Image.from_pixbuf (pixbuf);
-		return image;
+		return pixbuf;
+	}
+
+	/**
+	 * Return a (new) Gtk.Image displaying the card
+	 **/
+	public Gtk.Image get_image ()
+	{
+		Gtk.Image image = new Gtk.Image ();
+		image.set_from_pixbuf (this.get_pixbuf ());
+		return image;		
 	}
 
 	public void switch_selected ()

@@ -31,7 +31,6 @@ public class GraphicalHand:Gtk.Frame
 
 	public GraphicalHand (Hand hand)
 	{
-		Object (label: _("Hand"));
 		this.hand = hand;
 		refresh ();
 	}

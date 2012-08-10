@@ -31,7 +31,7 @@ public class GraphicalPlayer:Player
 
 	/* Widgets for differents elements */
 	public Gtk.ApplicationWindow window;
-	private Gtk.Fixed fixed;
+	private Gtk.Grid board;
 	private Gtk.Button button;
 	private GraphicalHand g_dog;
 	private Gtk.Label[] players_labels;
@@ -42,14 +42,14 @@ public class GraphicalPlayer:Player
 
 	/* Const parameters for the positions of differents elements */
 	private static const int[] WINDOW_SIZE = {800,600};
-	private static const int[] HAND_POS = {50, 450};
-	private static const int[] DOG_POS = {100, 250};
-	private static const int[] BUTTON_POS = {300, 400};
+	private static const int[] HAND_POS = {0, 12};
+	private static const int[] DOG_POS = {0, 7};
+	private static const int[] BUTTON_POS = {1, 11};
 	/* Two followings should be const, but there seems to be a bug in the vala
 	   compiler for const multi-dimensionnal arrays... let's change that
 	   when it's fixed. */
-	private static int[,] PLAYERS_LABELS_POS = {{250, 250}, {500, 100}, {250, 25},{100,100}};
-	private static int[,] PLAYERS_CARDS_POS = {{250, 275}, {500, 150}, {250, 75},{100,150}};
+	private static int[,] PLAYERS_LABELS_POS = {{1, 5}, {2, 2}, {1, 0},{0,2}};
+	private static int[,] PLAYERS_CARDS_POS = {{1, 6}, {2, 3}, {1, 1},{0,3}};
 
 	private int beginner;
 	private Card[] cards;
@@ -142,10 +142,15 @@ public class GraphicalPlayer:Player
 		window.add (grid);
 	   
 		/* Initialize the fixed */
-		fixed = new Gtk.Fixed ();
-		fixed.vexpand = true;
-		fixed.hexpand = true;
-		grid.attach (fixed, 0, 1, 1, 4);
+		board = new Gtk.Grid ();
+		board.vexpand = true;
+		board.hexpand = true;
+		board.set_row_spacing (2);
+		board.set_column_spacing (5);
+		board.set_row_homogeneous (true);
+		board.set_column_homogeneous (true);
+		
+		grid.attach (board, 0, 1, 1, 4);
 
 		/* ... the score sheet */
 		synthetic_score = new SynthethicScore (game);
@@ -178,14 +183,18 @@ public class GraphicalPlayer:Player
 
 		/* Initialize the hand */
 		g_hand = new GraphicalHand (hand);
-		fixed.put (g_hand, HAND_POS[0], HAND_POS[1]);
+		g_hand.hexpand = true;
+		board.attach (g_hand, HAND_POS[0], HAND_POS[1], 3, 4);
 
 		players_labels = new Gtk.Label[3];
 		players_cards = new Gtk.Image[4];
 		for (int i = 0; i < 4; i++)
 		{
 			players_labels[i] = null;
-			players_cards[i] = null;
+			players_cards[i] = new Gtk.Image ();
+			players_cards[i].halign = Gtk.Align.CENTER;
+			board.attach (players_cards[i], PLAYERS_CARDS_POS[i,0], PLAYERS_CARDS_POS[i,1], 1, 4);
+			players_cards[i].show ();
 		}
 
 		window.show_all ();
@@ -201,25 +210,18 @@ public class GraphicalPlayer:Player
 		/* TODO: rewrite this code */
 		for (int i = 0; i < players_cards.length; i++)
 		{
-			/* Delete labels and cards widgets from previous game */   
-			if (players_cards[i] != null)
-			{
-				players_cards[i].destroy ();
-				players_cards[i] = null;
-			}
+			players_cards[i].clear ();
 		}
 		for (int i = 0; i < cards.length; i++)
 		{
-			players_cards[i] = (cards[i] as GraphicalCard).get_image ();
-			assert (players_cards[i] != null);
-
-			fixed.put (players_cards[i], PLAYERS_CARDS_POS[i,0], PLAYERS_CARDS_POS[i,1]);
+			players_cards[i].set_from_pixbuf ((cards[i] as GraphicalCard).get_pixbuf ());
 			players_cards[i].show ();
 		}
 		refresh_players_names (winner);
 
 		button = new Gtk.Button.with_label (_("%s won").printf (game.players[winner].name));
-		fixed.put (button, BUTTON_POS[0], BUTTON_POS[1]);
+		button.halign = Gtk.Align.CENTER;
+		board.attach (button, BUTTON_POS[0], BUTTON_POS[1], 1, 1);
 		button.clicked.connect (clear_cards);
 		button.show ();
 	}
@@ -232,12 +234,7 @@ public class GraphicalPlayer:Player
 		}
 		for (int i = 0; i < players_cards.length; i++)
 		{
-			/* Delete labels and cards widgets from previous turn */   
-			if (players_cards[i] != null)
-			{
-				players_cards[i].destroy ();
-				players_cards[i] = null;
-			}
+			players_cards[i].clear ();
 		}
 		game.approve_new_turn (this);
 	}
@@ -264,11 +261,8 @@ public class GraphicalPlayer:Player
 		for (int i = 0; i < 4; i++)
 		{
 			/* Delete labels and cards widgets from previous game */   
-			if (players_cards[i] != null)
-			{
-				players_cards[i].destroy ();
-				players_cards[i] = null;
-			}
+			players_cards[i].clear ();
+
 			if (players_labels[i] != null)
 			{
 				players_labels[i].destroy ();
@@ -276,7 +270,8 @@ public class GraphicalPlayer:Player
 			}
 			players_labels[i] = new Gtk.Label (null);
 			players_labels[i].set_markup ("<b>"+game.players[i].name+"</b>");
-			fixed.put (players_labels[i], PLAYERS_LABELS_POS[i,0], PLAYERS_LABELS_POS[i,1]);
+			players_labels[i].halign = Gtk.Align.CENTER;
+			board.attach (players_labels[i], PLAYERS_LABELS_POS[i,0], PLAYERS_LABELS_POS[i,1], 1, 1);
 			players_labels[i].show ();
 		}
 
@@ -353,7 +348,8 @@ public class GraphicalPlayer:Player
 	public override void request_new_game ()
 	{
 		button = new Gtk.Button.with_label (_("New game"));
-		fixed.put (button, BUTTON_POS[0], BUTTON_POS[1]);
+		button.halign = Gtk.Align.CENTER;
+		board.attach (button, BUTTON_POS[0], BUTTON_POS[1], 1, 1);
 		button.clicked.connect (() =>
 			{
 				button.destroy ();
@@ -369,10 +365,12 @@ public class GraphicalPlayer:Player
 	public override void receive_dog (Hand dog)
 	{
 		g_dog = new GraphicalHand (dog);
-		fixed.put (g_dog, DOG_POS[0], DOG_POS[1]);
+		g_dog.halign = Gtk.Align.CENTER;
+		board.attach (g_dog, DOG_POS[0], DOG_POS[1], 3, 4);
 		
 		button = new Gtk.Button.with_label (_("OK"));
-		fixed.put (button, BUTTON_POS[0], BUTTON_POS[1]);
+		button.halign = Gtk.Align.CENTER;
+		board.attach (button, BUTTON_POS[0], BUTTON_POS[1], 1, 1);
 		
 		/* If the player took, she gets the dogs; else, she only sees
 		   it. */
@@ -482,18 +480,13 @@ public class GraphicalPlayer:Player
 		/** TODO: factorize this code **/
 		for (int i = 0; i < cards.length; i++)
 		{
-			/* Delete labels and cards widgets from previous game */   
-			if (players_cards[i] != null)
-			{
-				players_cards[i].destroy ();
-				players_cards[i] = null;
-			}
+			players_cards[i].clear ();
+
 			if (cards[i] != null)
 			{
 				assert (cards[i] is GraphicalCard);
 				GraphicalCard c = (GraphicalCard) cards[i];
-				players_cards[i] = c.get_image ();
-				fixed.put (players_cards[i], PLAYERS_CARDS_POS[i,0], PLAYERS_CARDS_POS[i,1]);
+				players_cards[i].set_from_pixbuf (c.get_pixbuf ());
 				players_cards[i].show ();
 			}
 		}
