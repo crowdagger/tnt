@@ -46,6 +46,8 @@ public class Game:GLib.Object
 	private Hand dog;
 	private int nb_approvals;
 	private Hand card_due_for_excuse;
+	private int petit_au_bout;
+
 	
 	/* Signal emitted when there is a new message */
 	public signal void new_message ();
@@ -134,6 +136,8 @@ public class Game:GLib.Object
 	private void init_values ()
 	{
 		nb_approvals = 0;
+		petit_au_bout = -1;
+
 		for (int i = 0; i < played_cards.length; i++)
 		{
 			played_cards[i] = null;
@@ -433,67 +437,78 @@ public class Game:GLib.Object
 		/* TODO: make this new method */
 		if (played_cards[current_player] != null)
 		{
-			/* Evaluate winner */
-			int winner = beginner;
-			for (int i = beginner; i < beginner + played_cards.length; i++)
-			{
-				int index = i % played_cards.length;
-				if (played_cards[index].is_better_than(played_cards[winner]))
-				{
-					winner = index;
-				}
-			}
-
-			foreach (Player p in players)
-			{
-				p.treat_turn_info (winner, played_cards);
-			}	
-			current_player = winner;
-			beginner = winner;
-			for (int i = 0; i < played_cards.length; i++)
-			{
-				/* Excuse is always particular */
-				assert (played_cards[i] != null);
-				if (played_cards[i].colour == Colour.TRUMP && played_cards[i].rank == 0 && current_turn != nb_turns - 1)
-				{
-					if (i == taker)
-					{
-						taker_stack.add (played_cards[i]);
-						if (i != winner)
-						{
-							card_due_for_excuse = taker_stack;
-						}
-					}
-					else
-					{
-						defenders_stack.add (played_cards[i]);
-						if (winner == taker)
-						{
-							card_due_for_excuse = defenders_stack;
-						}
-					}
-				}
-				else
-				{
-					if (taker == winner)
-					{
-						taker_stack.add (played_cards[i]);
-					}
-					else
-					{
-						defenders_stack.add (played_cards[i]);
-					}
-				}
-				played_cards[i] = null;
-			}
-			
-			current_turn++;
+			this.end_of_turn ();
 		}
 		else
 		{
 			players[current_player].select_card(beginner, played_cards);
 		}
 		return true;
+	}
+
+	private void end_of_turn ()
+	{
+		/* Evaluate winner */
+		int winner = beginner;
+		for (int i = beginner; i < beginner + played_cards.length; i++)
+		{
+			int index = i % played_cards.length;
+			if (played_cards[index].is_better_than(played_cards[winner]))
+			{
+				winner = index;
+			}
+		}
+
+		/* Checks whether this is "petit au bout */
+		if (this.current_turn == this.nb_turns -1 && this.played_cards[beginner].is_petit () == true && winner == this.beginner)
+		{
+			this.petit_au_bout = winner;
+		}
+
+		foreach (Player p in players)
+		{
+			p.treat_turn_info (winner, played_cards);
+		}	
+		current_player = winner;
+		beginner = winner;
+		for (int i = 0; i < played_cards.length; i++)
+		{
+			/* Excuse is always particular */
+			assert (played_cards[i] != null);
+			if (played_cards[i].colour == Colour.TRUMP && played_cards[i].rank == 0 && current_turn != nb_turns - 1)
+			{
+				if (i == taker)
+				{
+					taker_stack.add (played_cards[i]);
+					if (i != winner)
+					{
+						card_due_for_excuse = taker_stack;
+					}
+				}
+				else
+				{
+					defenders_stack.add (played_cards[i]);
+					if (winner == taker)
+					{
+						card_due_for_excuse = defenders_stack;
+					}
+				}
+			}
+			else
+			{
+				if (taker == winner)
+				{
+					taker_stack.add (played_cards[i]);
+				}
+				else
+				{
+					defenders_stack.add (played_cards[i]);
+				}
+			}
+			played_cards[i] = null;
+		}
+			
+		current_turn++;
 	}
 
 	/**
@@ -558,6 +573,26 @@ public class Game:GLib.Object
 					score -= 25;
 					message += _("Losing malus: -25\n");
 				}
+
+				/* Checks for petit au bout */
+				if (petit_au_bout == -1)
+				{
+					message += _("Petit au bout: no\n");
+				}
+				else
+				{
+					if (petit_au_bout == taker)
+					{
+						message += _("Bonus for petit au bout: 10\n");
+						score += 10;
+					}
+					else
+					{
+						message += _("Malus for petit au bout by the defenders: -10\n");
+						score -= 10;
+					}
+				}
+
 				assert(players_bids[taker] != Bid.NULL);
 					
 				message += _("Bid: %s; multiplier: %d\n").printf (players_bids[taker].to_string (), (int) players_bids[taker].get_multiplier ());

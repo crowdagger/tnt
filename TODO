@@ -6,7 +6,7 @@ What should be in 1.0
 
 Tarot rules
 -----------
-- Support petit au bout, poignée, and misère.
+- Support poignée, and misère.
 
 Artificial Intelligence
 -----------------------
@@ -16,8 +16,12 @@ Artificial Intelligence
 GUI
 ---
 - Improve card and players placement
-- Improve the way the game displays information
+- Improve the way the game displays information (e.g, bids)
 - Work on Scores.vala
+
+Help
+----
+- Write help files
 
 Code cleaning
 -------------
