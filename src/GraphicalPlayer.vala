@@ -154,6 +154,8 @@ public class GraphicalPlayer:Player
 
 		/* ... the score sheet */
 		synthetic_score = new SynthethicScore (game);
+		synthetic_score.hexpand = false;
+		synthetic_score.halign = Gtk.Align.START;
 		
 		var win = new Gtk.ScrolledWindow (null, null);
 		win.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);

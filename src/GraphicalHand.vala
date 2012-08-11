@@ -27,13 +27,21 @@
 public class GraphicalHand:Gtk.Frame
 {
 	public Hand hand {get; private set;}
+	private int width = 500;
 	private Gtk.Fixed fixed = null;
 
 	public GraphicalHand (Hand hand)
 	{
 		this.hand = hand;
+		this.size_allocate.connect ((allocation) => {this.width=allocation.width;});
 		refresh ();
 	}
+
+	// public override void size_allocate (Gtk.Allocation allocation)
+	// {
+	// 	this.width = allocation.width;
+	// 	stdout.printf ("%d\n", this.width);
+	// }
 
 	/**
 	 * Refresh the display. Necessary if a new hand is given. 
@@ -78,7 +86,7 @@ public class GraphicalHand:Gtk.Frame
 			}
 			
 			fixed.put (box, x, y);
-			x +=  (int) (500 / this.hand.list.size);
+			x +=  (int) ((width - 50)/ this.hand.list.size);
 		}
 
 		this.show_all ();
