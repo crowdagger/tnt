@@ -27,6 +27,16 @@ public class About:Gtk.AboutDialog
 {
 	public About ()
 	{
+		try 
+		{
+			Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file (Config.DATADIR+"/icons/hicolor/scalable/apps/tnt.svg");
+			set_logo (pixbuf);
+		}
+		catch (GLib.Error e)
+		{
+			stdout.printf ("Could not open Application logo: %s\n", e.message);
+		}
+
 		set_program_name (Config.PACKAGE_STRING);
 		set_version (Config.PACKAGE_VERSION);
 		set_authors ({"Élisabeth Henry http://segfault.ouvaton.org"});
