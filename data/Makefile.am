@@ -1,6 +1,6 @@
 # Makefile.am
 
-SUBDIRS = cards icons
+SUBDIRS = cards icons cards_marseille
 
 desktopdir = $(datadir)/applications
 desktop_in_files=tnt.desktop.in.in

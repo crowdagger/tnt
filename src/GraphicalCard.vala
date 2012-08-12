@@ -77,7 +77,7 @@ public class GraphicalCard:Card
 			else
 				image_file = (rank+55).to_string ();
 		}
-		image_file = "cards/"+image_file+".png";
+		image_file = "cards_marseille/"+image_file+".png";
 	}
 
 	/**

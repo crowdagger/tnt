@@ -1,6 +1,6 @@
 # configure.ac
 
-AC_INIT([TnT],[0.3.1])
+AC_INIT([TnT],[0.4])
 AC_CONFIG_SRCDIR([src/Tnt.vala])
 AC_CONFIG_HEADERS([config.h])
 
@@ -38,6 +38,7 @@ AC_CONFIG_FILES([
   vapi/Makefile
   data/Makefile
   data/cards/Makefile
+  data/cards_marseille/Makefile
   po/Makefile.in
   data/tnt.desktop.in
   help/Makefile
