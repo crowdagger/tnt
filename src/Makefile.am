@@ -21,7 +21,8 @@ INCLUDES = \
 	$(TNT_CFLAGS) \
 	-DLOCALEDIR=\""$(localedir)"\" \
 	-DPKGDATADIR=\""$(pkgdatadir)"\" \
-	-DPKGLIBDIR=\""$(pkglibdir)"\"
+	-DPKGLIBDIR=\""$(pkglibdir)"\" \
+	-DDATADIR=\""$(datadir)"\" 
 
 VALAFLAGS = \
 	-g --vapidir=$(srcdir)/../vapi --pkg config \

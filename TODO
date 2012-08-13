@@ -18,6 +18,7 @@ GUI
 - Improve card and players placement
 - Improve the way the game displays information (e.g, bids)
 - Work on Scores.vala
+- Add settings to change themes (and maybe compute scores differently)
 
 Help
 ----

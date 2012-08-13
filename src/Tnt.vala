@@ -115,9 +115,10 @@ public class Tnt:Gtk.Application
 		  </menu>
 		 </interface>""";
 		Gtk.Builder builder = new Gtk.Builder ();
+		builder.set_translation_domain (Config.PACKAGE_NAME);
 		try
 		{
-			builder.add_from_string (builder_description, -1);
+			builder.add_from_file (Config.PKGDATADIR + "/app_menu.ui");
 			this.app_menu = builder.get_object ("app-menu") as GLib.MenuModel;
 
 			var new_game = new SimpleAction ("new_game", null);
@@ -271,6 +272,9 @@ public class Tnt:Gtk.Application
 
 	public static int main (string[] args)
 	{
+		Intl.bindtextdomain (Config.PACKAGE_NAME, Config.LOCALEDIR);
+		Intl.bind_textdomain_codeset (Config.PACKAGE_NAME, "UTF-8");
+		Intl.textdomain (Config.PACKAGE_NAME);
 		tnt = new Tnt ();
 		tnt.run (args);
 
