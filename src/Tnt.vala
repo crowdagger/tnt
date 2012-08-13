@@ -80,40 +80,6 @@ public class Tnt:Gtk.Application
 	 **/
 	protected override void startup () {
 		base.startup ();
-
-		const string builder_description = 
-		""" <interface>
-		  <menu id = 'app-menu'>
-		  <section>
-		   <item>
-		   <attribute name='label' translatable='yes'>New Game</attribute>
-		   <attribute name='action'>app.new_game</attribute>
-		   </item>
-           <item>
-		   <attribute name='label' translatable='yes'>Score sheet</attribute>
-		   <attribute name='action'>app.scores</attribute>
-		   </item>
-		  </section>
-		  <section>
-		   <item>
-		   <attribute name='label' translatable='yes'>_Help</attribute>
-		   <attribute name='action'>app.help</attribute>
-		   <attribute name='accel'>F1</attribute>
-		   </item>
-		   <item>
-		   <attribute name='label' translatable='yes'>_About</attribute>
-		   <attribute name='action'>app.about</attribute>
-		   </item>
-		  </section>
-		  <section>
-		   <item>
-		   <attribute name='label' translatable='yes'>_Quit</attribute>
-		   <attribute name='action'>app.quit</attribute>
-		   <attribute name='accel'>&lt;Primary&gt;q</attribute>
-		   </item>
-		  </section>
-		  </menu>
-		 </interface>""";
 		Gtk.Builder builder = new Gtk.Builder ();
 		builder.set_translation_domain (Config.PACKAGE_NAME);
 		try
