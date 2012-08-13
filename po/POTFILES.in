@@ -1,4 +1,5 @@
 [encoding: UTF-8]
+[type: gettext/glade]data/app_menu.ui
 src/Tnt.vala
 src/About.vala
 src/Bid.vala

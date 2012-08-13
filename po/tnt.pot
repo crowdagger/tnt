@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-13 02:31+0200\n"
+"POT-Creation-Date: 2012-08-13 03:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,26 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../data/app_menu.ui.h:1
+msgid "New Game"
+msgstr ""
+
+#: ../data/app_menu.ui.h:2
+msgid "Score sheet"
+msgstr ""
+
+#: ../data/app_menu.ui.h:3
+msgid "Help"
+msgstr ""
+
+#: ../data/app_menu.ui.h:4
+msgid "About"
+msgstr ""
+
+#: ../data/app_menu.ui.h:5
+msgid "Quit"
+msgstr ""
 
 #: ../src/Tnt.vala:42 ../src/Game.vala:182
 msgid "Player 2"
@@ -34,29 +54,29 @@ msgstr ""
 msgid "Ooops: could not register application\n"
 msgstr ""
 
-#: ../src/Tnt.vala:150
+#: ../src/Tnt.vala:117
 #, c-format
 msgid "Could not open the help: %s"
 msgstr ""
 
-#: ../src/Tnt.vala:169
+#: ../src/Tnt.vala:136
 #, c-format
 msgid "Error creating application menu: %s\n"
 msgstr ""
 
-#: ../src/Tnt.vala:213 ../src/GraphicalPlayer.vala:352
+#: ../src/Tnt.vala:180 ../src/GraphicalPlayer.vala:352
 msgid "New game"
 msgstr ""
 
-#: ../src/Tnt.vala:218
+#: ../src/Tnt.vala:185
 msgid "Players settings"
 msgstr ""
 
-#: ../src/Tnt.vala:225
+#: ../src/Tnt.vala:192
 msgid "Name: "
 msgstr ""
 
-#: ../src/Tnt.vala:230
+#: ../src/Tnt.vala:197
 msgid "Human"
 msgstr ""
 
