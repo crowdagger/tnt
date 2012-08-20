@@ -84,7 +84,7 @@ public class Tnt:Gtk.Application
 		builder.set_translation_domain (Config.PACKAGE_NAME);
 		try
 		{
-			builder.add_from_file (Config.PKGDATADIR + "/app_menu.ui");
+			builder.add_from_file (GLib.Path.build_filename (Config.PKGDATADIR, "/app_menu.ui", null));
 			this.app_menu = builder.get_object ("app-menu") as GLib.MenuModel;
 
 			var new_game = new SimpleAction ("new_game", null);
