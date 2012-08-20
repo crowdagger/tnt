@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-13 03:39+0200\n"
+"POT-Creation-Date: 2012-08-20 22:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,47 +37,59 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-#: ../src/Tnt.vala:42 ../src/Game.vala:182
+#: ../src/Tnt.vala:43 ../src/Game.vala:182
 msgid "Player 2"
 msgstr ""
 
-#: ../src/Tnt.vala:43 ../src/Game.vala:182
+#: ../src/Tnt.vala:44 ../src/Game.vala:182
 msgid "Player 3"
 msgstr ""
 
-#: ../src/Tnt.vala:44 ../src/Game.vala:182
+#: ../src/Tnt.vala:45 ../src/Game.vala:182
 msgid "Player 4"
 msgstr ""
 
-#: ../src/Tnt.vala:57
+#: ../src/Tnt.vala:58
 #, c-format
 msgid "Ooops: could not register application\n"
 msgstr ""
 
-#: ../src/Tnt.vala:117
+#: ../src/Tnt.vala:118
 #, c-format
 msgid "Could not open the help: %s"
 msgstr ""
 
-#: ../src/Tnt.vala:136
+#: ../src/Tnt.vala:137
 #, c-format
 msgid "Error creating application menu: %s\n"
 msgstr ""
 
-#: ../src/Tnt.vala:180 ../src/GraphicalPlayer.vala:352
+#: ../src/Tnt.vala:181 ../src/GraphicalPlayer.vala:352
 msgid "New game"
 msgstr ""
 
-#: ../src/Tnt.vala:185
+#: ../src/Tnt.vala:186
 msgid "Players settings"
 msgstr ""
 
-#: ../src/Tnt.vala:192
+#: ../src/Tnt.vala:193
 msgid "Name: "
 msgstr ""
 
-#: ../src/Tnt.vala:197
+#: ../src/Tnt.vala:198
 msgid "Human"
+msgstr ""
+
+#: ../src/Tnt.vala:204
+msgid "Cards theme: "
+msgstr ""
+
+#: ../src/Tnt.vala:206
+msgid "CardPics"
+msgstr ""
+
+#: ../src/Tnt.vala:207
+msgid "CardPics with Tarot de Marseille's arcanas"
 msgstr ""
 
 #: ../src/About.vala:43

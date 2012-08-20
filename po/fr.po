@@ -1,14 +1,14 @@
 # French translations for TnT package
 # Traductions françaises du paquet TnT.
-# Copyright (C) 2012 THE TnT'S COPYRIGHT HOLDER
+# Copyright (C) 2012 Élisabeth Henry
 # This file is distributed under the same license as the TnT package.
-# Liz <liz.henry@ouvaton.org>, 2012.
+# Élisabeth Henry <liz.henry@ouvaton.org>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: TnT 0.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-13 03:39+0200\n"
+"POT-Creation-Date: 2012-08-20 22:35+0200\n"
 "PO-Revision-Date: 2012-08-13 16:32+0200\n"
 "Last-Translator: Liz <liz.henry@ouvaton.org>\n"
 "Language-Team: French\n"
@@ -38,48 +38,60 @@ msgstr "À propos"
 msgid "Quit"
 msgstr "Quitter"
 
-#: ../src/Tnt.vala:42 ../src/Game.vala:182
-msgid "Player 2"
-msgstr "Joueuse 2"
-
 #: ../src/Tnt.vala:43 ../src/Game.vala:182
-msgid "Player 3"
-msgstr "Joueuse 3"
+msgid "Player 2"
+msgstr "Joueu·r·se 2"
 
 #: ../src/Tnt.vala:44 ../src/Game.vala:182
-msgid "Player 4"
-msgstr "Joueuse 4"
+msgid "Player 3"
+msgstr "Joueu·r·se 3"
 
-#: ../src/Tnt.vala:57
+#: ../src/Tnt.vala:45 ../src/Game.vala:182
+msgid "Player 4"
+msgstr "Joueu·r·se 4"
+
+#: ../src/Tnt.vala:58
 #, c-format
 msgid "Ooops: could not register application\n"
 msgstr "Oups : impossible d'enregister l'application\n"
 
-#: ../src/Tnt.vala:117
+#: ../src/Tnt.vala:118
 #, c-format
 msgid "Could not open the help: %s"
 msgstr "Impossilbe d'ouvrir l'aide : %s"
 
-#: ../src/Tnt.vala:136
+#: ../src/Tnt.vala:137
 #, c-format
 msgid "Error creating application menu: %s\n"
 msgstr "Erreur dans la création du menu d'application : %s\n"
 
-#: ../src/Tnt.vala:180 ../src/GraphicalPlayer.vala:352
+#: ../src/Tnt.vala:181 ../src/GraphicalPlayer.vala:352
 msgid "New game"
 msgstr "Nouvelle partie"
 
-#: ../src/Tnt.vala:185
+#: ../src/Tnt.vala:186
 msgid "Players settings"
-msgstr "Paramètres des joueuses"
+msgstr "Paramètres des joueu·r·ses"
 
-#: ../src/Tnt.vala:192
+#: ../src/Tnt.vala:193
 msgid "Name: "
 msgstr "Nom : "
 
-#: ../src/Tnt.vala:197
+#: ../src/Tnt.vala:198
 msgid "Human"
 msgstr "Être humain"
+
+#: ../src/Tnt.vala:204
+msgid "Cards theme: "
+msgstr "Thème des cartes :"
+
+#: ../src/Tnt.vala:206
+msgid "CardPics"
+msgstr ""
+
+#: ../src/Tnt.vala:207
+msgid "CardPics with Tarot de Marseille's arcanas"
+msgstr "CardPics avec les arcanes du Tarot de Marseille"
 
 #: ../src/About.vala:43
 msgid "A simple french tarot game"
@@ -200,15 +212,15 @@ msgstr "Malus de défaite : -25\n"
 
 #: ../src/Game.vala:580
 msgid "Petit au bout: no\n"
-msgstr ""
+msgstr "Petit au bout : non\n"
 
 #: ../src/Game.vala:586
 msgid "Bonus for petit au bout: 10\n"
-msgstr ""
+msgstr "Bonus pour le petit au bout : 10\n"
 
 #: ../src/Game.vala:591
 msgid "Malus for petit au bout by the defenders: -10\n"
-msgstr ""
+msgstr "Malus pour le petit au bout par la défense : -10\n"
 
 #: ../src/Game.vala:598
 #, c-format
@@ -248,7 +260,7 @@ msgstr "Le chien doit contenir six cartes"
 
 #: ../src/GraphicalPlayer.vala:448
 msgid "Dog error"
-msgstr "Erreur canine"
+msgstr "Erreur dans le chien"
 
 #: ../src/SynthethicScore.vala:60
 msgid "Names"
