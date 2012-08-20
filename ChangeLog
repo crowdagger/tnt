@@ -3,6 +3,7 @@ ChangeLog
 
 ### Version 0.4 ###
 
+* New set of cards with basic illustrations for trumps
 * Added desktop icon.
 * Added stubs for help.
 * TnT now checks for error when loading card pictures, and can be

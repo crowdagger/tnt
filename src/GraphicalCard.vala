@@ -27,6 +27,7 @@
 public class GraphicalCard:Card
 {
 	public bool is_selected {get; set;}
+	public static string cards_path;
 	private string image_file;
 
 	public signal void select ();
@@ -77,7 +78,7 @@ public class GraphicalCard:Card
 			else
 				image_file = (rank+55).to_string ();
 		}
-		image_file = "cards_marseille/"+image_file+".png";
+		image_file = GLib.Path.build_filename (cards_path, image_file+".png", null);
 	}
 
 	/**
@@ -88,12 +89,12 @@ public class GraphicalCard:Card
 		Gdk.Pixbuf pixbuf = null;
 		/* Try to load the pixbuf; first from Config.PKGDATADIR, then from local dir (if TnT is not installed) */
 		try {
-			pixbuf = new Gdk.Pixbuf.from_file (Config.PKGDATADIR + "/" + image_file);
+			pixbuf = new Gdk.Pixbuf.from_file (GLib.Path.build_filename (Config.PKGDATADIR, image_file, null));
 		}
 		catch (GLib.Error e)
 		{
 			try {
-				pixbuf = new Gdk.Pixbuf.from_file ("data/" + image_file);
+				pixbuf = new Gdk.Pixbuf.from_file (GLib.Path.build_filename ("data", image_file, null));
 			}
 			catch (GLib.Error error)
 			{

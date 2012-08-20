@@ -691,7 +691,8 @@ public class Game:GLib.Object
 		else
 		{
 			GLib.FileStream stream = GLib.FileStream.open (file_to_save, "w");
-		
+
+			stream.printf ("%s\n", GraphicalCard.cards_path);
 			assert (deck.list.size == 78);
 			foreach (Card c in deck.list)
 			{
@@ -712,6 +713,7 @@ public class Game:GLib.Object
 	 **/
 	public void load (GLib.FileStream stream)
 	{
+		GraphicalCard.cards_path = stream.read_line ();
 		init_cards_from_stream (stream);
 
 		starter = int.parse (stream.read_line ());

@@ -37,12 +37,13 @@ public class Tnt:Gtk.Application
 
 	construct
 	{
+		GraphicalCard.cards_path = "cards";
 		names = new string[4];
 		names[0] = GLib.Environment.get_real_name ();
 		names[1] = _("Player 2");
 		names[2] = _("Player 3");
 		names[3] = _("Player 4");
-		file_name = GLib.Environment.get_home_dir () + "/.tnt";
+		file_name = GLib.Path.build_filename (GLib.Environment.get_user_config_dir (), "tnt", null);
 		stream = GLib.FileStream.open (file_name, "r");
 
 		this.set_application_id ("org.gtk.games.tnt");
@@ -199,10 +200,21 @@ public class Tnt:Gtk.Application
 			hbox.add (buttons[i]);
 			box.add (hbox);
 		}
+		Gtk.HBox hbox = new Gtk.HBox (true, 10);
+		hbox.add (new Gtk.Label (_("Cards theme: ")));
+		Gtk.ComboBoxText combo = new Gtk.ComboBoxText ();
+		combo.append ("cards", _("CardPics"));
+		combo.append ("cards_marseille", _("CardPics with Tarot de Marseille's arcanas"));
+		combo.set_active_id (GraphicalCard.cards_path);
+		hbox.add (combo);
+		box.add (hbox);		
+		
 		dialog.response.connect ((response_id) => 
 			{
 				if (response_id == Gtk.ResponseType.ACCEPT)
 				{
+					GraphicalCard.cards_path = combo.get_active_id ();
+
 					for (int i = 0; i < 4; i++)
 					{
 						names[i] = entries[i].get_text ();
